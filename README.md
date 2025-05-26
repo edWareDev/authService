@@ -1,14 +1,15 @@
-<!-- # 📡 eStreamPanel – Guía de Instalación y Despliegue
+# 📡Guía de Instalación y Despliegue
 
 ## 🧩 Descripción General
-**eStreamPanel** es un sistema middleware desarrollado como una API REST que se integra con **Flussonic** para gestionar suscriptores, streams, categorías, paquetes, planes, dispositivos, y servidores peer. Está diseñado para optimizar el control y distribución de contenido multimedia en plataformas de streaming.
+Este servicio fue desarrollado para encargarse de la autenticación de los sistemas desarrollados por la empresa. De esta manera tenemos un endpoint de autenticación.
 
 Este proyecto no incluye aún una interfaz Front-End, pero su arquitectura permite que pueda ser consumido por clientes externos a través de endpoints REST seguros y estructurados.
 
 ## ⚙️ Tecnologías Empleadas
 
 - **Back End:** Node.js
-- **Base de Datos:** MongoDB
+- **Base de Datos Principal:** MongoDB
+- **Base de Datos de Registros:** SQLite 3
 - **Gestión de Procesos:** PM2
 - **Documentación de API:** Swagger (`/api-docs`)
 - **Control de Versiones:** Git
@@ -25,8 +26,8 @@ Este proyecto no incluye aún una interfaz Front-End, pero su arquitectura permi
 
 ### 🧰 Software Necesario
 
-- Ubuntu 20.04 o superior (Recomendado)
-- Node.js 20 o superior (instalado con NVM)
+- Ubuntu 22.04 o superior (Recomendado)
+- Node.js 22 o superior (instalado con NVM)
 - MongoDB 7 o superior (Atlas o instancia local/remota)
 - PM2
 - Git
@@ -36,8 +37,8 @@ Este proyecto no incluye aún una interfaz Front-End, pero su arquitectura permi
 ### Clonación del Repositorio
 
 ```bash
-git clone -b remake https://github.com/edWareDev/eStreamPanel-backend.git
-cd eStreamPanel-backend
+git clone -b main https://github.com/Sattelital/authService
+cd authService
 ```
 ### Instalacion de dependencias
 En la carpeta raiz del sistema ejecutar el siguiente comando:
@@ -51,35 +52,17 @@ Crear un archivo `.env` en la raíz del proyecto con el siguiente contenido:
 NODE_ENV=development # Opciones: development, production
 
 # CONFIGURACIONES DE SEGURIDAD
-JWT_SECRET_KEY=key
-JWT_REFRESH_SECRET_KEY=otherKey
-JWT_ALGORITHM=HS512
+JWT_SECRET_KEY=key # Clave de encriptacion de tokens de acceso
+JWT_REFRESH_SECRET_KEY=otherKey # Clave de encriptación de tokens de refresco
+JWT_ALGORITHM=HS256 # Algoritmo de autenticación. Opciones: HS256, HS512
+DATA_ENCRYPTION_KEY=encriptionKey # Clave de encriptación de información importante/privada
 
 # CONFIGURACIÓN DE LA API
-API_PORT=3333
-MONGODB_CNX_STR=mongodb+srv://urlBaseDeDatos/eStreamPanel
-
-# CONFIGURACION FLUSSONIC PRINCIPAL
-FLUSSONIC_URL_STR="urlFlussonicPrincipal"
-FLUSSONIC_USER="userFlussonic"
-FLUSSONIC_PASSWORD="passFlussonic"
-FLUSSONIC_TEMPLATE_NAME="nombreDePlantillaDeStreams"
-
-# CONFIGURACIONES FUNCIONALES
-UPLOADED_IMAGES_FOLDER=./uploads
-IMAGES_FORMAT=webp # Opciones: jpeg, jpg, png, webp
-
-# CONFIGURACIÓN DE REPRODUCCIÓN
-VIDEO_TIME_AUTH=30 # Tiempo en segundos para autorización de reproducción
+API_PORT=3333 # Puerto por donde se expondrá la API
+MONGODB_CNX_STR=mongodb+srv://urlBaseDeDatos/eStreamPanel # URL de conexión con la base de datos MongoDB
 
 # CONFIGURACIONES DE LOGGING
-SAVE_LOGS=1
-```
-
-### Creación de carpeta de almacenamiento de logos de streams
-
-```bash
-mkdir uploads
+SAVE_LOGS=1 # Activar el registro de Logs
 ```
 
 ## 🚀 Despliegue en Producción
@@ -100,7 +83,7 @@ npm install -g pm2
 Inicia la aplicación con PM2 usando:
 
 ```
-pm2 start npm --name "eStreamPanel-API" -- run start
+pm2 start npm --name "authService-API" -- run start
 ```
 
 ### 3. Supervisar el estado
@@ -119,11 +102,11 @@ pm2 list
 #### Reinicio y Suprevisión
 Para reiniciar la aplicación después de cambios en configuración o código:
 ```
-pm2 restart eStreamPanel-API
+pm2 restart authService-API
 ```
 Para visualizar logs en tiempo real:
 ```
-pm2 logs eStreamPanel-API
+pm2 logs authService-API
 ```
 
 ### 4. Configuración opcional de dominio y SSL
@@ -131,7 +114,7 @@ Actualmente no es necesario, pero puede agregarse configurando un proxy inverso 
 
 ---
 
-# 📡 Uso del Sistema
+<!-- # 📡 Uso del Sistema
 ## 🔁 Flujo funcional para creación de suscriptores
 * Crear categorías para streams.
 * Crear streams, asignándoles una categoría.
@@ -144,7 +127,7 @@ Actualmente no es necesario, pero puede agregarse configurando un proxy inverso 
 * Cada stream debe estar asociado a una categoría.
 * Los paquetes están formados por streams.
 * Los planes están formados por paquetes.
-* El suscriptor debe tener asignado un plan y un peer.
+* El suscriptor debe tener asignado un plan y un peer. -->
 
 ---
 
@@ -174,7 +157,7 @@ Desde allí se puede:
 
 ## 📝 Mantenimiento y Logs
 ### Almacenamiento y consulta de logs
-* Los logs se almacenan en la base de datos MongoDB.
+* Los logs se almacenan en la base de datos SQLite.
 * Se pueden consultar a través de los endpoints disponibles.
 
 ### Comandos útiles con PM2
@@ -196,4 +179,4 @@ pm2 status
 ## 📌 Contacto Técnico
 Responsable del mantenimiento:
 
-Edward Espinoza Tito | edward.espinoza@globalfiber.com.pe -->
+Edward Espinoza Tito | edward.espinoza@globalfiber.com.pe
