@@ -59,7 +59,12 @@ DATA_ENCRYPTION_KEY=encriptionKey # Clave de encriptación de información impor
 
 # CONFIGURACIÓN DE LA API
 API_PORT=3333 # Puerto por donde se expondrá la API
+
+#CONFIGURACIÓN DE LA BASE DE DATOS MONGODB
 MONGODB_CNX_STR=mongodb+srv://urlBaseDeDatos/eStreamPanel # URL de conexión con la base de datos MongoDB
+
+#CONFIGURACIÓN DE LA BASE DE DATOS SQLITE
+SQLITE_CNX_STR = archivo_SQLite # Ruta al archivo que se creará y servirá como base de datos par alos registros 
 
 # CONFIGURACIONES DE LOGGING
 SAVE_LOGS=1 # Activar el registro de Logs
