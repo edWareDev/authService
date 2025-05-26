@@ -1,4 +1,4 @@
-# 📡 eStreamPanel – Guía de Instalación y Despliegue
+<!-- # 📡 eStreamPanel – Guía de Instalación y Despliegue
 
 ## 🧩 Descripción General
 **eStreamPanel** es un sistema middleware desarrollado como una API REST que se integra con **Flussonic** para gestionar suscriptores, streams, categorías, paquetes, planes, dispositivos, y servidores peer. Está diseñado para optimizar el control y distribución de contenido multimedia en plataformas de streaming.
@@ -196,4 +196,4 @@ pm2 status
 ## 📌 Contacto Técnico
 Responsable del mantenimiento:
 
-Edward Espinoza Tito | edward.espinoza@globalfiber.com.pe
+Edward Espinoza Tito | edward.espinoza@globalfiber.com.pe -->
