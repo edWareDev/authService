@@ -17,7 +17,6 @@ import { createLoggingMiddleware } from "./middlewares/loggingMiddleware.js"; //
 
 // import routers
 import { apiRouter } from "./adapters/routers/apiRouter.js"; // main api routes
-// import { authRouter } from "./adapters/routers/authRouter.js"; // authentication routes
 import { healthRouter } from "./adapters/routers/healthRouter.js"; // server health check routes
 import { connectSQLite } from "../config/sqlite.js";
 
@@ -52,11 +51,10 @@ app.use('/api', validateBearerToken, apiRouter);
 
 // serve swagger documentation
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerFile, {
-    customSiteTitle: "eStreamPanel API Documentation",
+    customSiteTitle: "API del Servicio de Autenticación",
     customCss: '.swagger-ui .topbar { display: none }',
 }));
 
-// app.use('/auth', authRouter);
 app.use('/health', healthRouter);
 
 // handle all other routes (404)
