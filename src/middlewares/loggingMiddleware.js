@@ -180,7 +180,7 @@ export const createLoggingMiddleware = () => {
                 if (user.error) user = null;
             }
 
-            if (systemInfo._DB_STATUS) {
+            if (systemInfo._LOG_DB_STATUS) {
                 await createRequestLog({
                     requestId,
                     userId: user ? user._id.toString() : null,
@@ -199,7 +199,7 @@ export const createLoggingMiddleware = () => {
                 const responseTime = Date.now() - startTime;
                 const sanitizedBody = sanitizeBody(body)
                 // Log de la respuesta
-                if (systemInfo._DB_STATUS) {
+                if (systemInfo._LOG_DB_STATUS) {
                     const responseDATA = {
                         requestId,
                         responseTime,

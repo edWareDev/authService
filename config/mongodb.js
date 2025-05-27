@@ -24,7 +24,7 @@ export async function connectMongoDB() {
             mongoose.connection.on('connected', async () => {
                 const MESSAGE = `Base de Datos Conectada`
                 systemInfo.setDbStatus(true);
-                if (systemInfo._DB_STATUS) {
+                if (systemInfo._LOG_DB_STATUS) {
                     await createSystemLog({
                         errorCode: null,
                         message: MESSAGE,
@@ -36,16 +36,30 @@ export async function connectMongoDB() {
                 return
             });
 
-            mongoose.connection.on('error', () => {
+            mongoose.connection.on('error', async () => {
                 const MESSAGE = `Error en la conexión a la base de datos`
                 systemInfo.setDbStatus(false);
+                if (systemInfo._LOG_DB_STATUS) {
+                    await createSystemLog({
+                        errorCode: null,
+                        message: MESSAGE,
+                        severityLevel: "info"
+                    })
+                }
                 console.error(MESSAGE);
                 return
             });
 
-            mongoose.connection.on('disconnected', () => {
+            mongoose.connection.on('disconnected', async () => {
                 const MESSAGE = 'Desconectado de la base de datos'
                 systemInfo.setDbStatus(false);
+                if (systemInfo._LOG_DB_STATUS) {
+                    await createSystemLog({
+                        errorCode: null,
+                        message: MESSAGE,
+                        severityLevel: "info"
+                    })
+                }
                 console.error(MESSAGE);
                 return
             });
@@ -57,6 +71,13 @@ export async function connectMongoDB() {
     } catch {
         const MESSAGE = 'Error al conectar con la base de datos'
         systemInfo.setDbStatus(false);
+        if (systemInfo._LOG_DB_STATUS) {
+            await createSystemLog({
+                errorCode: null,
+                message: MESSAGE,
+                severityLevel: "info"
+            })
+        }
         console.error(MESSAGE);
 
         // // Reintento con un intervalo de espera
