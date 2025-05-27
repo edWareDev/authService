@@ -4,8 +4,7 @@ import cors from "cors";
 import swaggerUi from "swagger-ui-express"; // for serving swagger documentation
 import { createRequire } from 'module';
 const require = createRequire(import.meta.url);
-const swaggerFile = require('../swagger_output.json');
-// swagger documentation file
+const swaggerFile = require('../swagger_output.json');// swagger documentation file
 
 // import configurations and service connections
 import { connectMongoDB } from "../config/mongodb.js"; // connects to MongoDB
@@ -21,9 +20,8 @@ import { healthRouter } from "./adapters/routers/healthRouter.js"; // server hea
 import { connectSQLite } from "../config/sqlite.js";
 
 // import { errorRouter } from "./adapters/routers/404Router.js"; // handles 404 errors
-import { validateBearerToken } from "./adapters/web/middlewares/validationMiddleware.js"; // token validation middleware
+import { validateBearerToken } from "./middlewares/validationMiddleware.js"; // token validation middleware
 // import { setupTaskScheduler } from "./schedulers/taskScheduler.js"; // scheduled tasks
-// import { validateBearerToken } from "./middlewares/validateBearerToken,.js";
 
 export const app = express();
 const loggingMiddleware = createLoggingMiddleware();
