@@ -24,23 +24,19 @@ export async function connectSQLite() {
 
         const MESSAGE = 'Base de Datos de registros Conectada';
         console.log(MESSAGE);
-        if (systemInfo._LOG_DB_STATUS) {
-            await createSystemLog({
-                errorCode: null,
-                message: MESSAGE,
-                severityLevel: "info"
-            })
-        }
+        await createSystemLog({
+            errorCode: null,
+            message: MESSAGE,
+            severityLevel: "info"
+        })
     } catch (error) {
         const MESSAGE = 'Error al conectar con la base de datos de registros'
         systemInfo.setDbStatus(false);
-        if (systemInfo._LOG_DB_STATUS) {
-            await createSystemLog({
-                errorCode: null,
-                message: MESSAGE,
-                severityLevel: "info"
-            })
-        }
+        await createSystemLog({
+            errorCode: null,
+            message: MESSAGE,
+            severityLevel: "info"
+        })
         console.error(MESSAGE, error);
         systemInfo.setLogDbStatus(false);
     }
