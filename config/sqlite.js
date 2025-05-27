@@ -32,7 +32,16 @@ export async function connectSQLite() {
             })
         }
     } catch (error) {
-        console.error("No se pudo conectar a SQLite:", error);
+        const MESSAGE = 'Error al conectar con la base de datos de registros'
+        systemInfo.setDbStatus(false);
+        if (systemInfo._LOG_DB_STATUS) {
+            await createSystemLog({
+                errorCode: null,
+                message: MESSAGE,
+                severityLevel: "info"
+            })
+        }
+        console.error(MESSAGE, error);
         systemInfo.setLogDbStatus(false);
     }
 }
