@@ -1,7 +1,4 @@
 import { createSystemLog } from "../src/usecases/logs/CreateSystemLog.js";
-import { SystemInfo } from "./systemInfo.js";
-
-const systemInfo = new SystemInfo();
 
 export const startServer = (app) => {
 
@@ -12,13 +9,11 @@ export const startServer = (app) => {
             const MESSAGE = process.env.NODE_ENV === "development"
                 ? `Conectado al servidor mediante el puerto: ${PORT}`
                 : 'Conectado al servidor';
-            if (systemInfo._LOG_DB_STATUS) {
-                await createSystemLog({
-                    errorCode: null,
-                    message: MESSAGE,
-                    severityLevel: "info"
-                });
-            }
+            await createSystemLog({
+                errorCode: null,
+                message: MESSAGE,
+                severityLevel: "info"
+            });
             console.log(MESSAGE);
             resolve(server);
             return
@@ -42,13 +37,11 @@ export const startServer = (app) => {
                     errorCodes = ['SERVER_STARTUP_ERROR'];
             }
 
-            if (systemInfo._LOG_DB_STATUS) {
-                await createSystemLog({
-                    errorCode: errorCodes,
-                    message: errorMessage,
-                    severityLevel: "error"
-                });
-            }
+            await createSystemLog({
+                errorCode: errorCodes,
+                message: errorMessage,
+                severityLevel: "error"
+            });
 
             console.error(errorMessage);
             reject(error);
