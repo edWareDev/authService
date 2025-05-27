@@ -1,10 +1,8 @@
-import { SystemInfo } from '../../config/systemInfo.js';
 import { createRequestLog } from '../usecases/logs/CreateRequestLog.js';
 import { createResponseLog } from '../usecases/logs/CreateResponseLog.js';
 import { nanoid } from 'nanoid';
 import { getUserByToken } from '../usecases/users/GetUserByToken.js';
 
-const systemInfo = new SystemInfo();
 // Constante para el texto de reemplazo
 const PROTECTED = '[PROTECTED]';
 
@@ -180,36 +178,30 @@ export const createLoggingMiddleware = () => {
                 if (user.error) user = null;
             }
 
-            if (systemInfo._DB_STATUS) {
-                await createRequestLog({
-                    requestId,
-                    userId: user ? user._id.toString() : null,
-                    endpoint: `${String(req.originalUrl || req.url).split('?')[0]}`,
-                    method: req.method,
-                    headers: sanitizeHeaders(req.headers),
-                    queryParams: req.query,
-                    body: memoizedSanitizeBody(req.body),
-                    ip: getClientIp(req)
-                });
-            }
+            await createRequestLog({
+                requestId,
+                userId: user ? user._id.toString() : null,
+                endpoint: `${String(req.originalUrl || req.url).split('?')[0]}`,
+                method: req.method,
+                headers: sanitizeHeaders(req.headers),
+                queryParams: req.query,
+                body: memoizedSanitizeBody(req.body),
+                ip: getClientIp(req)
+            });
 
             // Intercepta la respuesta
             const originalSend = res.send;
             res.send = async function (body) {
                 const responseTime = Date.now() - startTime;
                 const sanitizedBody = sanitizeBody(body)
-                // Log de la respuesta
-                if (systemInfo._DB_STATUS) {
-                    const responseDATA = {
-                        requestId,
-                        responseTime,
-                        body: body,
-                        statusCode: sanitizedBody.statusCode,
-                        errorCode: sanitizedBody.errorCode || null,
-                        message: sanitizedBody.message
-                    }
-                    await createResponseLog(responseDATA)
-                }
+                await createResponseLog({
+                    requestId,
+                    responseTime,
+                    body: body,
+                    statusCode: sanitizedBody.statusCode,
+                    errorCode: sanitizedBody.errorCode || null,
+                    message: sanitizedBody.message
+                })
 
                 return originalSend.apply(res, arguments);
             };

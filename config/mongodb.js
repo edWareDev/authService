@@ -24,28 +24,36 @@ export async function connectMongoDB() {
             mongoose.connection.on('connected', async () => {
                 const MESSAGE = `Base de Datos Conectada`
                 systemInfo.setDbStatus(true);
-                if (systemInfo._DB_STATUS) {
-                    await createSystemLog({
-                        errorCode: null,
-                        message: MESSAGE,
-                        severityLevel: "info"
-                    })
-                }
+                await createSystemLog({
+                    errorCode: null,
+                    message: MESSAGE,
+                    severityLevel: "info"
+                })
 
                 console.log(MESSAGE);
                 return
             });
 
-            mongoose.connection.on('error', () => {
+            mongoose.connection.on('error', async () => {
                 const MESSAGE = `Error en la conexión a la base de datos`
                 systemInfo.setDbStatus(false);
+                await createSystemLog({
+                    errorCode: null,
+                    message: MESSAGE,
+                    severityLevel: "info"
+                })
                 console.error(MESSAGE);
                 return
             });
 
-            mongoose.connection.on('disconnected', () => {
+            mongoose.connection.on('disconnected', async () => {
                 const MESSAGE = 'Desconectado de la base de datos'
                 systemInfo.setDbStatus(false);
+                await createSystemLog({
+                    errorCode: null,
+                    message: MESSAGE,
+                    severityLevel: "info"
+                })
                 console.error(MESSAGE);
                 return
             });
@@ -54,10 +62,15 @@ export async function connectMongoDB() {
 
         // Intentar conectar
         await mongoose.connect(MONGODB_CNX_STR, options);
-    } catch {
+    } catch (error) {
         const MESSAGE = 'Error al conectar con la base de datos'
         systemInfo.setDbStatus(false);
-        console.error(MESSAGE);
+        await createSystemLog({
+            errorCode: null,
+            message: MESSAGE,
+            severityLevel: "info"
+        })
+        console.error(MESSAGE, error);
 
         // // Reintento con un intervalo de espera
         // await new Promise(resolve => setTimeout(resolve, 5000));

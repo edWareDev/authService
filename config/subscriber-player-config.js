@@ -1,1 +1,0 @@
-export const VIDEO_TIME_AUTH = process.env.VIDEO_TIME_AUTH;
