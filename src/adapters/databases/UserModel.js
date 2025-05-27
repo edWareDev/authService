@@ -39,8 +39,7 @@ export const UserSchema = new Schema({
     userIsActive: {
         type: Boolean,
         required: true,
-        default: true,
-        index: true
+        default: true
     },
     userLoginAttempts: {
         type: Number,
