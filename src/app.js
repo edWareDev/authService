@@ -32,9 +32,6 @@ const loggingMiddleware = createLoggingMiddleware();
 app.use(cors());
 // app.use(cors(corsOptions));
 
-// serve static files from the ./uploads directory
-app.use(express.static('./uploads'));
-
 // parse json request bodies
 app.use(express.json());
 
