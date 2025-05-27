@@ -5,8 +5,8 @@ import { validatePermissions } from "../../middlewares/validateUserRole.js";
 export const usersRouter = Router();
 
 // RUTAS GET
-usersRouter.get('/', validatePermissions(["administrator", "contentManager", "monitor"]), controllerGetUsers)
-usersRouter.get('/id/:Id', validatePermissions(["administrator", "contentManager", "monitor"]), controllerGetUserById)
+usersRouter.get('/', validatePermissions(["administrator", "user"]), controllerGetUsers)
+usersRouter.get('/id/:Id', validatePermissions(["administrator", "user"]), controllerGetUserById)
 
 // RUTAS POST
 usersRouter.post('/', validatePermissions(["administrator"]), controllerCreateUser)
