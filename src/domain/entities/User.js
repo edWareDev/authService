@@ -1,12 +1,13 @@
 export class User {
-    constructor({ userName, userEmail, userPassword, userToken, userRole, userIsActive, userLoginAttempts, deletedAt, deletedBy }) {
+    constructor({ userName, userDni, userEmail, userPassword, userRole, userIsActive, userLoginAttempts, lastLogin, deletedAt, deletedBy }) {
         this.userName = userName;
+        this.userDni = userDni;
         this.userEmail = userEmail;
         this.userPassword = userPassword;
-        this.userToken = userToken;
         this.userRole = userRole;
         this.userIsActive = userIsActive && true;
         this.userLoginAttempts = userLoginAttempts || 0;
+        this.userLastLogin = lastLogin || null;
         this.deletedAt = deletedAt || null;
         this.deletedBy = deletedBy || null;
     }

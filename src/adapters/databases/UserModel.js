@@ -1,27 +1,32 @@
 import { Schema, Types } from "mongoose";
 
-const ENUM_USER_ROLE = ["administrator", "contentManager", "monitor"];
+const ENUM_USER_ROLE = ["administrator", "user"];
 
 export const UserSchema = new Schema({
     userName: {
         type: String,
         required: true,
         trim: true,
-        minlength: 5
+        minlength: 3
+    },
+    userDni: {
+        type: String,
+        required: true,
+        trim: true,
+        minlength: 8,
+        maxlength: 8,
+        unique: true,
+        index: true
     },
     userEmail: {
         type: String,
         required: true,
         trim: true,
-        minlength: 10,
+        minlength: 5,
         unique: true,
         index: true
     },
     userPassword: {
-        type: String,
-        required: true,
-    },
-    userToken: {
         type: String,
         required: true,
     },
@@ -42,6 +47,10 @@ export const UserSchema = new Schema({
         required: true,
         default: 0,
         min: 0
+    },
+    userLastLogin: {
+        type: Date,
+        default: null
     },
     deletedAt: {
         type: Date,
