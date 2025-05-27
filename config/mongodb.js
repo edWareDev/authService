@@ -68,7 +68,7 @@ export async function connectMongoDB() {
 
         // Intentar conectar
         await mongoose.connect(MONGODB_CNX_STR, options);
-    } catch {
+    } catch (error) {
         const MESSAGE = 'Error al conectar con la base de datos'
         systemInfo.setDbStatus(false);
         if (systemInfo._LOG_DB_STATUS) {
@@ -78,7 +78,7 @@ export async function connectMongoDB() {
                 severityLevel: "info"
             })
         }
-        console.error(MESSAGE);
+        console.error(MESSAGE, error);
 
         // // Reintento con un intervalo de espera
         // await new Promise(resolve => setTimeout(resolve, 5000));

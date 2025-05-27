@@ -12,7 +12,7 @@ export const startServer = (app) => {
             const MESSAGE = process.env.NODE_ENV === "development"
                 ? `Conectado al servidor mediante el puerto: ${PORT}`
                 : 'Conectado al servidor';
-            if (systemInfo._DB_STATUS) {
+            if (systemInfo._LOG_DB_STATUS) {
                 await createSystemLog({
                     errorCode: null,
                     message: MESSAGE,
@@ -42,7 +42,7 @@ export const startServer = (app) => {
                     errorCodes = ['SERVER_STARTUP_ERROR'];
             }
 
-            if (systemInfo._DB_STATUS) {
+            if (systemInfo._LOG_DB_STATUS) {
                 await createSystemLog({
                     errorCode: errorCodes,
                     message: errorMessage,
