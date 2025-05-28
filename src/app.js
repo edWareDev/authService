@@ -1,5 +1,6 @@
 import express from "express";
 import cors from "cors";
+import cookieParser from "cookie-parser";
 
 import swaggerUi from "swagger-ui-express"; // for serving swagger documentation
 import { createRequire } from 'module';
@@ -30,6 +31,7 @@ const loggingMiddleware = createLoggingMiddleware();
 // enable cors with custom options
 app.use(cors());
 // app.use(cors(corsOptions));
+app.use(cookieParser());
 
 // parse json request bodies
 app.use(express.json());
