@@ -8,9 +8,10 @@ import { generatePassword } from "../../utils/passwordGenerator.js";
 
 export const createUser = async (data) => {
     try {
-        const { name, email, password, role, isActive } = createUserSchema.parse(data)
+        const { name, dni, email, password, role, isActive } = createUserSchema.parse(data)
         const tempUser = new User({
             userName: name,
+            userDni: dni,
             userEmail: email,
             userPassword: await hashPassword(password),
             userToken: generatePassword(40),
