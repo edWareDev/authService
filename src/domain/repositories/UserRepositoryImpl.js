@@ -43,6 +43,15 @@ class UsersRepository {
         }
     }
 
+    async getUserByEmail(userEmail) {
+        try {
+            const userFound = await this.#usersDb.findOne({ userEmail }).lean()
+            return userFound ? userFound : { error: 'No existe el usuario con ese token.' }
+        } catch (error) {
+            return ({ error: error.message })
+        }
+    }
+
     async getUserByToken(token) {
         try {
             const userFound = await this.#usersDb.findOne({ userToken: token }).lean()

@@ -26,7 +26,7 @@ export const RefreshTokenSchema = new Schema({
         required: true,
         default: true
     },
-    expiredAt: {
+    expirationDate: {
         type: Date,
         required: true
     },

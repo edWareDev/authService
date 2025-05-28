@@ -21,6 +21,7 @@ import { connectSQLite } from "../config/sqlite.js";
 
 // import { errorRouter } from "./adapters/routers/404Router.js"; // handles 404 errors
 import { validateBearerToken } from "./middlewares/validationMiddleware.js"; // token validation middleware
+import { authRouter } from "./adapters/routers/authRouter.js";
 // import { setupTaskScheduler } from "./schedulers/taskScheduler.js"; // scheduled tasks
 
 export const app = express();
@@ -43,6 +44,8 @@ app.use(loggingMiddleware);
 // protect api routes with bearer token validation
 
 app.use('/api', validateBearerToken, apiRouter);
+
+app.use('/auth', authRouter)
 
 // serve swagger documentation
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerFile, {
