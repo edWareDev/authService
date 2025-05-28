@@ -17,15 +17,5 @@ export const UserSystemLinkSchema = new Schema({
         type: Boolean,
         required: true,
         default: true
-    },
-    deletedAt: {
-        type: Date,
-        default: null
-    },
-    deletedBy: {
-        type: Types.ObjectId,
-        ref: 'users',
-        default: null,
-        select: false
     }
 }, { versionKey: false, timestamps: true, collection: 'userSystemLinks' });
