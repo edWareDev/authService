@@ -10,6 +10,8 @@ export const validateAccessToken = async (req, res, next) => {
         if (!authHeader) throw new CustomError('Error al obtener los datos.', 400, ["Token de autenticación no encontrado."]);
 
         const accessToken = authHeader.split(' ')[1];
+        if (!accessToken || accessToken === '') throw new CustomError('Error al obtener los datos.', 400, ["Token de autenticación no encontrado."]);
+
         const accessTokenData = verifyAccessToken(accessToken);
         if (!accessTokenData) throw new CustomError('Error al obtener los datos.', 400, ["Token de autenticación inválido."]);
 
