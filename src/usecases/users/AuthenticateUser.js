@@ -1,35 +1,44 @@
+import { ZodError } from "zod";
 import { loginSchema } from "../../adapters/web/validators/authValidators.js";
 import { validateHashedPassword } from "../../utils/bcrypt.js";
-import { CustomError } from "../../utils/CustomError.js";
 import { createRefreshToken } from "../refreshToken/CreateRefreshToken.js";
 import { getSystemBySecret } from "../systems/GetSystemBySecret.js";
 import { getUserSystemLinksByUserIdAndSystemId } from "../userSystemLink/GetUserSystemLinkByUserIdAndSystemId.js";
 import { getUserByEmail } from "./GetUserByEmail.js";
+import { createAccessToken } from "../accessToken/CreateAccessToken.js";
 
 export const authenticateUser = async (data) => {
     try {
         const { secret, email, password } = loginSchema.parse(data);
+
         const userFound = await getUserByEmail(email);
-        if (!userFound || userFound.error) throw new CustomError('No fue posible iniciar sesión', 400, [userFound?.error | "Credenciales Incorrectas"]);
-        if (!userFound.userIsActive) throw new CustomError('No fue posible iniciar sesión', 401, ['El usuario no está activo.']);
+        if (!userFound || userFound.error) throw new Error("Credenciales Incorrectas");
+        if (!userFound.userIsActive) throw new Error('El usuario no está activo.');
 
         const isMatched = validateHashedPassword(password, userFound.userPassword)
-        if (!isMatched) throw new CustomError('No fue posible iniciar sesión', 400, ['Credenciales Incorrectas']);
+        if (!isMatched) throw new Error('Credenciales Incorrectas');
 
         const systemFound = await getSystemBySecret(secret);
-        if (!systemFound || systemFound.error) throw new CustomError('No fue posible iniciar sesión', 400, [systemFound?.error | "Credenciales Incorrectas"]);
+        if (!systemFound || systemFound.error) throw new Error("Credenciales Incorrectas");
 
         const systemLinked = getUserSystemLinksByUserIdAndSystemId(userFound._id, systemFound._id);
-        if (!systemLinked || systemLinked.error) throw new CustomError('No fue posible iniciar sesión', 400, [systemLinked?.error | "Sin acceso al sistema."]);
-        if (!systemLinked.userSystemLinkIsActive) throw new CustomError('No fue posible iniciar sesión', 401, ['El usuario no está activo en el sistema.']);
+        if (!systemLinked || systemLinked.error) throw new Error("Sin acceso al sistema.");
+        if (!systemLinked.userSystemLinkIsActive) throw new Error('El usuario no está activo en el sistema.');
 
-        const newRefreshToken = createRefreshToken({ userId: userFound._id, systemId: systemFound._id });
+        const refreshToken = await createRefreshToken({ userId: userFound._id, systemId: systemFound._id });
+        if (!refreshToken || refreshToken.error) throw new Error("Error al generar el token de actualización.");
 
-        return {
-            newRefreshToken
-        }
+        const accessToken = createAccessToken({ userId: userFound._id, systemId: systemFound._id });
+        if (!accessToken || accessToken.error) throw new Error("Error al generar el token de acceso.");
 
+        return { refreshToken, accessToken }
     } catch (error) {
-        return { error: error.message };
+        if (error instanceof ZodError) {
+            return { error: JSON.parse(error.message).map(error => error.message) };
+        } else if (String(error.message).includes('[')) {
+            return { error: JSON.parse(error.message).map(error => error) };
+        } else {
+            return { error: error.message };
+        }
     }
 }

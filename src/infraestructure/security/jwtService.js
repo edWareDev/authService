@@ -3,11 +3,19 @@ import { jwtConfig } from "../../../config/jwtConfig.js";
 
 
 export const generateAccessToken = (payload) => {
-    return jwt.sign(payload, jwtConfig.accessToken.secret, { expiresIn: jwtConfig.accessToken.expiresIn, algorithm: jwtConfig.accessToken.algorithm });
+    try {
+        return jwt.sign(payload, jwtConfig.accessToken.secret, { expiresIn: jwtConfig.accessToken.expiresIn, algorithm: jwtConfig.accessToken.algorithm });
+    } catch (error) {
+        return { error: "Error al generar el token de acceso" };
+    }
 }
 
 export const generateRefreshToken = (payload) => {
-    return jwt.sign(payload, jwtConfig.refreshToken.secret, { expiresIn: jwtConfig.refreshToken.expiresIn, algorithm: jwtConfig.refreshToken.algorithm });
+    try {
+        return jwt.sign(payload, jwtConfig.refreshToken.secret, { expiresIn: jwtConfig.refreshToken.expiresIn, algorithm: jwtConfig.refreshToken.algorithm });
+    } catch (error) {
+        return { error: "Error al generar el token de actualización" };
+    }
 }
 
 export const verifyAccessToken = (token) => {

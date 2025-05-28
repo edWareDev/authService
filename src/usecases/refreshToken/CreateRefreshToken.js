@@ -1,56 +1,29 @@
-import { addMinutes, addHours, addDays } from 'date-fns';
 import { ZodError } from 'zod';
 import { generateRefreshToken } from '../../infraestructure/security/jwtService.js';
-import { TIME_UNIT } from '../../utils/constants.js';
-import { RefreshTokenPayload } from '../../domain/entities/RefreshTokenPayload.js';
 import { RefreshToken } from '../../domain/entities/RefreshToken.js';
 import { refreshTokensRepository } from '../../domain/repositories/RefreshTokenRepositoryImpl.js';
-import { jwtConfig } from '../../../config/jwtConfig.js';
+import { decodeToken } from "../../infraestructure/security/jwtService.js";
 
 export const createRefreshToken = async ({ userId, systemId }) => {
     try {
-        const expirationConfig = jwtConfig.refreshToken.expiresIn;
-        if (!expirationConfig) throw new Error("Refresh token expiration not configured.");
-
-        const unit = expirationConfig.slice(-1);
-        const quantity = parseInt(expirationConfig.slice(0, -1), 10);
-        if (isNaN(quantity)) throw new Error("Invalid refresh token expiration format.");
-
-        const now = new Date();
-        let expirationDate;
-
-        switch (unit) {
-            case TIME_UNIT.MINUTES:
-                expirationDate = addMinutes(now, quantity);
-                break;
-            case TIME_UNIT.HOURS:
-                expirationDate = addHours(now, quantity);
-                break;
-            case TIME_UNIT.DAYS:
-                expirationDate = addDays(now, quantity);
-                break;
-            default:
-                throw new Error("Unsupported time unit in expiration config.");
-        }
-
-        const payload = new RefreshTokenPayload({
+        const payloadRefreshToken = {
             emisor: "authService",
             userId,
             systemId,
-            expirationDate,
-            creationDate: now,
-        });
+        };
 
-        const refreshTokenValue = await generateRefreshToken(payload);
+        const refreshTokenValue = generateRefreshToken(payloadRefreshToken);
         if (!refreshTokenValue) throw new Error("Failed to generate refresh token.");
+
+        const refreshTokenData = decodeToken(refreshTokenValue);
+        if (!refreshTokenData || !refreshTokenData.payload || refreshTokenData.error) throw new Error("Error al decodificar el refresh token.");
 
         const tokenToSave = new RefreshToken({
             userId,
             systemId,
             tokenValue: refreshTokenValue,
             tokenIsActive: true,
-            expirationDate,
-            creationDate: now,
+            expirationDate: new Date(refreshTokenData.payload.exp * 1000)
         });
 
         const savedToken = await refreshTokensRepository.createRefreshToken(tokenToSave);

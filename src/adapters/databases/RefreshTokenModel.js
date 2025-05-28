@@ -29,15 +29,5 @@ export const RefreshTokenSchema = new Schema({
     expirationDate: {
         type: Date,
         required: true
-    },
-    deletedAt: {
-        type: Date,
-        default: null
-    },
-    deletedBy: {
-        type: Types.ObjectId,
-        ref: 'users',
-        default: null,
-        select: false
     }
 }, { versionKey: false, timestamps: true, collection: 'refreshTokens' });
