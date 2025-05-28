@@ -1,10 +1,11 @@
 import { addMinutes, addHours, addDays } from 'date-fns';
 import { ZodError } from 'zod';
-import { TIME_UNIT } from '../constants';
-import jwtConfig from '../config/jwtConfig';
-import { generateRefreshToken } from '../utils/tokenUtils';
-import { RefreshTokenPayload, RefreshToken } from '../models';
-import refreshTokensRepository from '../repositories/refreshTokensRepository';
+import { generateRefreshToken } from '../../infraestructure/security/jwtService.js';
+import { TIME_UNIT } from '../../utils/constants.js';
+import { RefreshTokenPayload } from '../../domain/entities/RefreshTokenPayload.js';
+import { RefreshToken } from '../../domain/entities/RefreshToken.js';
+import { refreshTokensRepository } from '../../domain/repositories/RefreshTokenRepositoryImpl.js';
+import { jwtConfig } from '../../../config/jwtConfig.js';
 
 export const createRefreshToken = async ({ userId, systemId }) => {
     try {
