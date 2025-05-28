@@ -52,15 +52,6 @@ class UsersRepository {
         }
     }
 
-    async getUserByToken(token) {
-        try {
-            const userFound = await this.#usersDb.findOne({ userToken: token }).lean()
-            return userFound ? userFound : { error: 'No existe el usuario con ese token.' }
-        } catch (error) {
-            return ({ error: error.message })
-        }
-    }
-
     async createUser(user) {
         try {
             const newUser = await this.#usersDb.create(user)

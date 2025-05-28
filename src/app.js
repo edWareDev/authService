@@ -20,7 +20,7 @@ import { healthRouter } from "./adapters/routers/healthRouter.js"; // server hea
 import { connectSQLite } from "../config/sqlite.js";
 
 // import { errorRouter } from "./adapters/routers/404Router.js"; // handles 404 errors
-import { validateBearerToken } from "./middlewares/validationMiddleware.js"; // token validation middleware
+import { validateAccessToken } from "./middlewares/validationMiddleware.js"; // token validation middleware
 import { authRouter } from "./adapters/routers/authRouter.js";
 // import { setupTaskScheduler } from "./schedulers/taskScheduler.js"; // scheduled tasks
 
@@ -43,7 +43,7 @@ app.use(loggingMiddleware);
 // define api routes
 // protect api routes with bearer token validation
 
-app.use('/api', validateBearerToken, apiRouter);
+app.use('/api', validateAccessToken, apiRouter);
 
 app.use('/auth', authRouter)
 
