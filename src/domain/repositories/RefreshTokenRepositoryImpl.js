@@ -10,7 +10,7 @@ class RefreshTokensRepository {
 
     async getRefreshTokenByValue(tokenValue) {
         try {
-            const refreshTokenFound = await this.#refreshTokensDb.findOne({ tokenValue }).lean()
+            const refreshTokenFound = await this.#refreshTokensDb.findOne({ tokenValue: tokenValue }).lean()
             return refreshTokenFound ? refreshTokenFound : { error: 'No existe el refresh token con ese value.' }
         } catch (error) {
             return ({ error: error.message })

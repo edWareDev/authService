@@ -1,29 +1,28 @@
 import { ZodError } from 'zod';
-import { generateRefreshToken } from '../../infraestructure/security/jwtService.js';
+import { generateRefreshToken, verifyRefreshToken } from '../../infraestructure/security/jwtService.js';
 import { RefreshToken } from '../../domain/entities/RefreshToken.js';
 import { refreshTokensRepository } from '../../domain/repositories/RefreshTokenRepositoryImpl.js';
-import { decodeToken } from "../../infraestructure/security/jwtService.js";
 
 export const createRefreshToken = async ({ userId, systemId }) => {
     try {
         const payloadRefreshToken = {
-            emisor: "authService",
-            userId,
-            systemId,
+            iss: "authService",
+            sub: String(userId),
+            aud: String(systemId),
         };
 
         const refreshTokenValue = generateRefreshToken(payloadRefreshToken);
         if (!refreshTokenValue) throw new Error("Failed to generate refresh token.");
 
-        const refreshTokenData = decodeToken(refreshTokenValue);
-        if (!refreshTokenData || !refreshTokenData.payload || refreshTokenData.error) throw new Error("Error al decodificar el refresh token.");
+        const refreshTokenData = verifyRefreshToken(refreshTokenValue);
+        if (!refreshTokenData || refreshTokenData.error) throw new Error(refreshTokenData?.error || "Error al verificar el refresh token.");
 
         const tokenToSave = new RefreshToken({
             userId,
             systemId,
             tokenValue: refreshTokenValue,
             tokenIsActive: true,
-            expirationDate: new Date(refreshTokenData.payload.exp * 1000)
+            expirationDate: new Date(refreshTokenData.exp * 1000)
         });
 
         const savedToken = await refreshTokensRepository.createRefreshToken(tokenToSave);

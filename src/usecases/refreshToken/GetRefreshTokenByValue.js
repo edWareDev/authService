@@ -3,9 +3,8 @@ import { refreshTokensRepository } from '../../domain/repositories/RefreshTokenR
 
 export const getRefreshTokenByValue = async (tokenValue) => {
     try {
-
         const sanitizedTokenValue = String(tokenValue).trim()
-        if (!sanitizedTokenValue || sanitizedTokenValue.length !== 20) throw new Error('El token ingresado no es válido.');
+        if (!sanitizedTokenValue) throw new Error('El token ingresado no es válido.');
 
         const refreshTokenFound = await refreshTokensRepository.getRefreshTokenByValue(sanitizedTokenValue);
         if (refreshTokenFound.error) throw new Error(refreshTokenFound.error);

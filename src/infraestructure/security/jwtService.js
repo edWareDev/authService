@@ -21,26 +21,15 @@ export const generateRefreshToken = (payload) => {
 export const verifyAccessToken = (token) => {
     try {
         return jwt.verify(token, jwtConfig.accessToken.secret, { algorithms: [jwtConfig.accessToken.algorithm] });
-    } catch (err) {
-        console.error('La verificación del token JWT falló:', err.message);
-        return null;
+    } catch (error) {
+        return { error: error.message || "Error al verificar el access token" };
     }
 }
 
 export const verifyRefreshToken = (token) => {
     try {
-        return jwt.verify(token, jwtConfig.accessToken.secret, { algorithms: [jwtConfig.accessToken.algorithm] });
-    } catch (err) {
-        console.error('La verificación del token JWT falló:', err.message);
-        return null;
-    }
-}
-
-export const decodeToken = (token) => {
-    try {
-        return jwt.decode(token, { complete: true });
-    } catch (err) {
-        console.error('La decodificación del token JWT falló:', err.message);
-        return null;
+        return jwt.verify(token, jwtConfig.refreshToken.secret, { algorithms: [jwtConfig.refreshToken.algorithm] });
+    } catch (error) {
+        return { error: error.message || "Error al verificar el refresh token" };
     }
 }

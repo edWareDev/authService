@@ -6,7 +6,7 @@ import { getRefreshTokenByValue } from './GetRefreshTokenByValue.js';
 export const disableRefreshToken = async (tokenValue) => {
     try {
 
-        const tokenFound = getRefreshTokenByValue(tokenValue);
+        const tokenFound = await getRefreshTokenByValue(tokenValue);
         if (tokenFound.error) throw new Error(tokenFound.error);
 
 
@@ -18,7 +18,7 @@ export const disableRefreshToken = async (tokenValue) => {
             expirationDate: tokenFound.expirationDate
         });
 
-        const savedToken = await refreshTokensRepository.updateRefreshToken(tokenToSave);
+        const savedToken = await refreshTokensRepository.updateRefreshToken(tokenFound._id, tokenToSave);
         if (savedToken?.error) throw new Error(savedToken.error);
 
         return savedToken;

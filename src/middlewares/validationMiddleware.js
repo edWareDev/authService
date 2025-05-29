@@ -13,7 +13,8 @@ export const validateAccessToken = async (req, res, next) => {
         if (!accessToken || accessToken === '') throw new CustomError('Error al obtener los datos.', 400, ["Token de autenticación no encontrado."]);
 
         const accessTokenData = verifyAccessToken(accessToken);
-        if (!accessTokenData) throw new CustomError('Error al obtener los datos.', 400, ["Token de autenticación inválido."]);
+        if (accessTokenData.error === 'jwt expired') throw new CustomError('Error al obtener los datos.', 401, ["Token de autenticación expirado."]);
+        if (!accessTokenData || accessTokenData.error) throw new CustomError('Error al obtener los datos.', 400, ["Token de autenticación inválido."]);
 
         const fechaActual = new Date();
         const fechaCreacion = new Date(accessTokenData.iat * 1000);

@@ -5,8 +5,8 @@ export const createAccessToken = ({ userId, systemId }) => {
     try {
         const payloadAccessToken = {
             emisor: "authService",
-            userId,
-            systemId,
+            userId: String(userId),
+            systemId: String(systemId),
         };
 
         const accessTokenValue = generateAccessToken(payloadAccessToken);

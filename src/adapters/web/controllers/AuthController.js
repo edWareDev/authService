@@ -1,3 +1,5 @@
+import { verifyRefreshToken } from "../../../infraestructure/security/jwtService.js";
+import { disableRefreshToken } from "../../../usecases/refreshToken/DisableRefreshToken.js";
 import { authenticateUser } from "../../../usecases/users/AuthenticateUser.js";
 import { CustomError } from "../../../utils/CustomError.js";
 import { fetchResponse } from "../../../utils/fetchResponse.js";
@@ -30,11 +32,11 @@ export async function controllerLogout(req, res) {
         const refreshToken = req.cookies?.refreshToken;
         if (!refreshToken) CustomError('Hubo un error al cerrar la sesión', 400, "ERR_REFRESH_TOKEN_MISSING");
 
-        // const tokenData = verifyRefreshToken(refreshToken);
-        // if (!tokenData || tokenData.error) throw new CustomError('Hubo un error al cerrar la sesión', 400, "ERR_REFRESH_TOKEN_INVALID");
+        const tokenData = verifyRefreshToken(refreshToken);
+        if (!tokenData || tokenData.error) throw new CustomError('Hubo un error al cerrar la sesión', 400, [tokenData?.error || "El rfresh token es inválido"]);
 
-        // const disabledToken = disableRefreshToken(refreshToken);
-        // if (!disabledToken || disabledToken.error) CustomError("No se pudo desactivar el refresh token.", 400, "ERR_TOKEN_REVOKE");
+        const disabledToken = await disableRefreshToken(refreshToken);
+        if (!disabledToken || disabledToken.error) CustomError("No se pudo desactivar el refresh token.", 400, "El token ya fue desactivado o no existe.");
 
         res.clearCookie('refreshToken', {
             httpOnly: true,
