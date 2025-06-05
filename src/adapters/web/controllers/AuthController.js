@@ -1,4 +1,4 @@
-import { verifyRefreshToken } from "../../../infraestructure/security/jwtService.js";
+import { verifyAccessToken, verifyRefreshToken } from "../../../infraestructure/security/jwtService.js";
 import { createAccessToken } from "../../../usecases/accessToken/CreateAccessToken.js";
 import { disableRefreshToken } from "../../../usecases/refreshToken/DisableRefreshToken.js";
 import { authenticateUser } from "../../../usecases/users/AuthenticateUser.js";
@@ -18,6 +18,25 @@ export async function controllerLogin(req, res) {
             path: '/auth'
         });
         fetchResponse(res, { statusCode: 200, message: 'Sesión iniciada correctamente.', data: { accessToken: authenticationData.accessToken } });
+    } catch (error) {
+        if (error instanceof CustomError) {
+            const { message, httpErrorCode, errorCode } = error.toJSON();
+            fetchResponse(res, { statusCode: httpErrorCode, message, errorCode });
+        } else {
+            fetchResponse(res, { statusCode: 500, errorCode: "ERR_UNEXPECTED", message: "Ha ocurrido un error inesperado" });
+        }
+    }
+}
+
+export async function controllerValidateAccessToken(req, res) {
+    try {
+        const { accessToken } = req.body;
+        if (!accessToken || accessToken === '') throw new CustomError('Hubo un error al validar el token', 400, "El access token es invñalido o no fue enviado.");
+
+        const tokenData = verifyAccessToken(accessToken);
+        if (!tokenData || tokenData.error) throw new CustomError('Hubo un error al refrescar el token', 400, [tokenData?.error || "El refresh token es inválido"]);
+
+        fetchResponse(res, { statusCode: 200, message: 'Sesión iniciada correctamente.', data: { tokenData } });
     } catch (error) {
         if (error instanceof CustomError) {
             const { message, httpErrorCode, errorCode } = error.toJSON();

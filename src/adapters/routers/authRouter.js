@@ -9,6 +9,9 @@ export const authRouter = Router()
 authRouter.post('/login', controllerLogin)
 
 // REFRESH TOKEN
+authRouter.post('/validateAccessToken', controllerRefreshAccessToken)
+
+// REFRESH TOKEN
 authRouter.post('/refreshAccessToken', controllerRefreshAccessToken)
 
 // RUTAS DELETE

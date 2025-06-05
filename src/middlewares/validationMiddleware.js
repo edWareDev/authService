@@ -1,20 +1,12 @@
-import { verifyAccessToken } from "../infraestructure/security/jwtService.js";
+import { validateAccessToken } from "../usecases/accessToken/ValidateAccessToken.js";
 import { getUserById } from "../usecases/users/GetUserById.js";
 import { CustomError } from "../utils/CustomError.js";
 import { fetchResponse } from "../utils/fetchResponse.js";
 
 
-export const validateAccessToken = async (req, res, next) => {
+export const validationMiddleware = async (req, res, next) => {
     try {
-        const authHeader = req.headers['authorization'];
-        if (!authHeader) throw new CustomError('Error al obtener los datos.', 400, ["Token de autenticación no encontrado."]);
-
-        const accessToken = authHeader.split(' ')[1];
-        if (!accessToken || accessToken === '') throw new CustomError('Error al obtener los datos.', 400, ["Token de autenticación no encontrado."]);
-
-        const accessTokenData = verifyAccessToken(accessToken);
-        if (accessTokenData.error === 'jwt expired') throw new CustomError('Error al obtener los datos.', 401, ["Token de autenticación expirado."]);
-        if (!accessTokenData || accessTokenData.error) throw new CustomError('Error al obtener los datos.', 400, ["Token de autenticación inválido."]);
+        const accessTokenData = validateAccessToken(req);
 
         const fechaActual = new Date();
         const fechaCreacion = new Date(accessTokenData.iat * 1000);
