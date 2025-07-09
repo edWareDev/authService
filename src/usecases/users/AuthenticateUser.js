@@ -42,6 +42,7 @@ export const authenticateUser = async (data) => {
             await userFound.save();
             throw new Error(`Credenciales Incorrectas: ${MAX_LOGIN_ATTEMPTS - userFound.userLoginAttempts} intentos restantes.`);
         } else {
+            userFound.userLoginAttempts = 0;
             userFound.userLastLogin = actualTime;
             await userFound.save();
         }
