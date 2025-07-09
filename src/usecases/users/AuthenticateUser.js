@@ -51,8 +51,7 @@ export const authenticateUser = async (data) => {
         if (!systemFound || systemFound.error) throw new Error("Credenciales Incorrectas");
 
         const systemLinked = await getUserSystemLinksByUserIdAndSystemId(userFound._id, systemFound._id);
-        if (!systemLinked || systemLinked.error) throw new Error("No tienes acceso a este sistema.");
-        if (!systemLinked.userSystemLinkIsActive) throw new Error('El usuario fue desactivado del sistema.');
+        if (!systemLinked || systemLinked.error || !systemLinked.userSystemLinkIsActive) throw new Error("No tienes acceso a este sistema.");
 
         const refreshToken = await createRefreshToken({ userId: userFound._id, systemId: systemFound._id });
         if (!refreshToken || refreshToken.error) throw new Error("Error al generar el token de actualización.");
