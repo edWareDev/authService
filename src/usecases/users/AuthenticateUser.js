@@ -15,27 +15,42 @@ export const authenticateUser = async (data) => {
         if (!userFound || userFound.error) throw new Error("Credenciales Incorrectas");
         if (!userFound.userIsActive) throw new Error('El usuario no está activo.');
 
-        const isMatched = await validateHashedPassword(password, userFound.userPassword)
+        const MAX_LOGIN_ATTEMPTS = 5;
+        const LOGIN_TIMEOUT = 5; // in minutes
 
-        if (!isMatched) {
-            if (userFound.userLoginAttempts >= 5) throw new Error('Se ha superado el límite de intentos. Intente nuevamente en 15 minutos.');
-            userFound.userLoginAttempts++;
+        const actualTime = new Date();
+        if (userFound.userLoginAttempts >= MAX_LOGIN_ATTEMPTS) {
+            const timeDifference = actualTime.getTime() - userFound.userLastLoginAttempt.getTime();
 
-            await userFound.save();
+            if (timeDifference < (LOGIN_TIMEOUT * 60 * 1000)) {
+                const remainingTime = LOGIN_TIMEOUT * 60 - Math.floor(timeDifference / 1000);
+                throw new Error(`Se ha superado el límite de intentos. Por favor, inténtelo de nuevo en ${remainingTime < 60 ? `${remainingTime} segundos` : `${Math.floor(remainingTime / 60)} minutos y ${remainingTime % 60} segundos`}`);
 
-            throw new Error('Credenciales Incorrectas: ');
-        } else {
-            if (userFound.userLoginAttempts > 0) {
+            } else {
                 userFound.userLoginAttempts = 0;
+                userFound.userLastLoginAttempt = actualTime;
                 await userFound.save();
             }
+        }
+
+        userFound.userLastLoginAttempt = actualTime;
+        await userFound.save();
+
+        const isMatched = await validateHashedPassword(password, userFound.userPassword)
+        if (!isMatched) {
+            userFound.userLoginAttempts++;
+            await userFound.save();
+            throw new Error(`Credenciales Incorrectas: ${MAX_LOGIN_ATTEMPTS - userFound.userLoginAttempts} intentos restantes.`);
+        } else {
+            userFound.userLastLogin = actualTime;
+            await userFound.save();
         }
 
         const systemFound = await getSystemBySecret(secret);
         if (!systemFound || systemFound.error) throw new Error("Credenciales Incorrectas");
 
         const systemLinked = await getUserSystemLinksByUserIdAndSystemId(userFound._id, systemFound._id);
-        if (!systemLinked || systemLinked.error) throw new Error("Sin acceso al sistema.");
+        if (!systemLinked || systemLinked.error) throw new Error("No tienes acceso a este sistema.");
         if (!systemLinked.userSystemLinkIsActive) throw new Error('El usuario fue desactivado del sistema.');
 
         const refreshToken = await createRefreshToken({ userId: userFound._id, systemId: systemFound._id });
