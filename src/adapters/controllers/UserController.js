@@ -45,7 +45,7 @@ export async function controllerCreateUser(req, res) {
         if (error instanceof CustomError) {
             const { message, httpErrorCode, errorCode } = error.toJSON();
             if (String(errorCode).includes('duplicate')) {
-                fetchResponse(res, { statusCode: httpErrorCode, message, errorCode: "El correo electrónico ya está en uso." });
+                fetchResponse(res, { statusCode: httpErrorCode, message, errorCode: "El correo electrónico o dni ya está en uso." });
             } else {
                 fetchResponse(res, { statusCode: httpErrorCode, message, errorCode });
             }
@@ -64,7 +64,7 @@ export async function controllerUpdateUser(req, res) {
         if (error instanceof CustomError) {
             const { message, httpErrorCode, errorCode } = error.toJSON();
             if (String(errorCode).includes('duplicate')) {
-                fetchResponse(res, { statusCode: httpErrorCode, message, errorCode: "El correo electrónico ya está en uso." });
+                fetchResponse(res, { statusCode: httpErrorCode, message, errorCode: "El correo electrónico o dni ya está en uso." });
             } else {
                 fetchResponse(res, { statusCode: httpErrorCode, message, errorCode });
             }

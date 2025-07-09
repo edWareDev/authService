@@ -51,6 +51,10 @@ export const UserSchema = new Schema({
         type: Date,
         default: null
     },
+    userLastLoginAttempt: {
+        type: Date,
+        default: null
+    },
     deletedAt: {
         type: Date,
         default: null

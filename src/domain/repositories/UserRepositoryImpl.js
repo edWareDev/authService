@@ -45,7 +45,7 @@ class UsersRepository {
 
     async getUserByEmail(userEmail) {
         try {
-            const userFound = await this.#usersDb.findOne({ userEmail }).lean()
+            const userFound = await this.#usersDb.findOne({ userEmail })
             return userFound ? userFound : { error: 'No existe el usuario con ese token.' }
         } catch (error) {
             return ({ error: error.message })
