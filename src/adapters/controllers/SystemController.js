@@ -2,7 +2,9 @@ import { createSystem } from "../../usecases/systems/CreateSystem.js";
 import { deleteSystem } from "../../usecases/systems/DeleteSystem.js";
 import { getSystemById } from "../../usecases/systems/GetSystemById.js";
 import { getSystems } from "../../usecases/systems/GetSystems.js";
+import { getUserSystemLinksByUserId } from "../../usecases/systems/GetSystemsByUserId.js";
 import { updateSystem } from "../../usecases/systems/UpdateSystem.js";
+import { getUserById } from "../../usecases/users/GetUserById.js";
 import { CustomError } from "../../utils/CustomError.js";
 import { fetchResponse } from "../../utils/fetchResponse.js";
 
@@ -26,6 +28,26 @@ export async function controllerGetSystemById(req, res) {
         const systemFound = await getSystemById(req.params.Id);
         if (systemFound.error) throw new CustomError('Hubo un error al encontrar el sistema.', 404, systemFound.error);
         fetchResponse(res, { statusCode: 200, message: 'Sistema encontrado correctamente.', errorCode: null, data: systemFound });
+    } catch (error) {
+        if (error instanceof CustomError) {
+            const { message, httpErrorCode, errorCode } = error.toJSON();
+            fetchResponse(res, { statusCode: httpErrorCode, message, errorCode });
+        } else {
+            fetchResponse(res, { statusCode: 500, errorCode: "ERR_UNEXPECTED", message: "Ha ocurrido un error inesperado" });
+        }
+    }
+}
+
+export async function controllerGetSystemsByUserId(req, res) {
+    try {
+        const userFound = await getUserById(req.params.Id);
+        if (userFound.error) throw new CustomError('Hubo un error al encontrar el usuario.', 404, userFound.error);
+
+        const populate = (String(req.query?.populate).trim() === 'true' ? true : false);
+        const systemsFound = await getUserSystemLinksByUserId(req.query, userFound._id, populate)
+        if (systemsFound.error) throw new CustomError('Error al obtener los usuarios.', 404, systemsFound.error);
+
+        fetchResponse(res, { statusCode: 200, message: 'Sistemas encontrados correctamente.', errorCode: null, data: systemsFound });
     } catch (error) {
         if (error instanceof CustomError) {
             const { message, httpErrorCode, errorCode } = error.toJSON();

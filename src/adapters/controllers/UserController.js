@@ -5,6 +5,8 @@ import { createUser } from './../../usecases/users/CreateUser.js';
 import { updateUser } from "../../usecases/users/UpdateUser.js";
 import { getUserById } from "../../usecases/users/GetUserById.js";
 import { deleteUser } from "../../usecases/users/DeleteUser.js";
+import { getSystemById } from "../../usecases/systems/GetSystemById.js";
+import { getUserSystemLinksBySystemId } from "../../usecases/users/GetUsersBySystemId.js";
 
 export async function controllerGetUsers(req, res) {
     try {
@@ -26,6 +28,26 @@ export async function controllerGetUserById(req, res) {
         const userFound = await getUserById(req.params.Id);
         if (userFound.error) throw new CustomError('Hubo un error al encontrar el usuario.', 404, userFound.error);
         fetchResponse(res, { statusCode: 200, message: 'Usuario encontrado correctamente.', errorCode: null, data: userFound });
+    } catch (error) {
+        if (error instanceof CustomError) {
+            const { message, httpErrorCode, errorCode } = error.toJSON();
+            fetchResponse(res, { statusCode: httpErrorCode, message, errorCode });
+        } else {
+            fetchResponse(res, { statusCode: 500, errorCode: "ERR_UNEXPECTED", message: "Ha ocurrido un error inesperado" });
+        }
+    }
+}
+
+export async function controllerGetUsersBySystemId(req, res) {
+    try {
+        const systemFound = await getSystemById(req.params.Id);
+        if (systemFound.error) throw new CustomError('Hubo un error al encontrar el usuario.', 404, systemFound.error);
+
+        const populate = (String(req.query?.populate).trim() === 'true' ? true : false);
+        const usersFound = await getUserSystemLinksBySystemId(req.query, systemFound._id, populate)
+        if (usersFound.error) throw new CustomError('Error al obtener los usuarios.', 404, usersFound.error);
+
+        fetchResponse(res, { statusCode: 200, message: 'Usuarios encontrados correctamente.', errorCode: null, data: usersFound });
     } catch (error) {
         if (error instanceof CustomError) {
             const { message, httpErrorCode, errorCode } = error.toJSON();

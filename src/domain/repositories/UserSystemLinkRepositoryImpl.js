@@ -34,13 +34,14 @@ class UserSystemLinksRepository {
         }
     }
 
-    async getUserSystemLinksByUserId({ page, limit, skip }, userId) {
+    async getUserSystemLinksByUserId({ page, limit, skip }, userId, populate) {
         try {
             const systems = await this.#userSystemLinksDb
                 .find({ userId })
                 .skip(skip)
                 .limit(limit)
                 .sort({ createdAt: -1 })
+                .populate(populate ? ["systemId"] : [])
                 .lean();
 
             const systemsInPage = systems.length
@@ -61,13 +62,14 @@ class UserSystemLinksRepository {
         }
     }
 
-    async getUserSystemLinksBySystemId({ page, limit, skip }, systemId) {
+    async getUserSystemLinksBySystemId({ page, limit, skip }, systemId, populate) {
         try {
             const users = await this.#userSystemLinksDb
                 .find({ systemId })
                 .skip(skip)
                 .limit(limit)
                 .sort({ createdAt: -1 })
+                .populate(populate ? ["userId"] : [])
                 .lean();
 
             const usersInPage = users.length
