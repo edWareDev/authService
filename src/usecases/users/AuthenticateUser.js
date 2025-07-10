@@ -51,7 +51,6 @@ export const authenticateUser = async (data) => {
         if (!systemFound || systemFound.error) throw new Error("Credenciales Incorrectas");
 
         const systemLinked = await getUserSystemLinksByUserIdAndSystemId(userFound._id, systemFound._id, false);
-        console.log("🚀 ~ authenticateUser ~ systemLinked:", systemLinked)
         if (systemLinked.error) throw new Error(systemLinked.error)
         if (!systemLinked || !systemLinked.userSystemLinkIsActive) throw new Error("No tienes acceso a este sistema.");
 

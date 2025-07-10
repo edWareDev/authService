@@ -17,7 +17,6 @@ export async function controllerLogin(req, res) {
             sameSite: 'None',
             path: '/auth'
         }
-        console.log("🚀 ~ controllerLogin ~ cookieConfig:", cookieConfig)
 
         res.cookie('refreshToken', authenticationData.refreshToken.tokenValue, cookieConfig);
         fetchResponse(res, { statusCode: 200, message: 'Sesión iniciada correctamente.', data: { accessToken: authenticationData.accessToken } });
@@ -53,7 +52,7 @@ export async function controllerValidateAccessToken(req, res) {
 export async function controllerRefreshAccessToken(req, res) {
     try {
         const refreshToken = req.cookies?.refreshToken;
-        if (!refreshToken || refreshToken === '') throw new CustomError('Hubo un error al cerrar la sesión', 400, "El refresh token no fue encontrado.");
+        if (!refreshToken || refreshToken === '') throw new CustomError('Hubo un error refrescar token', 400, "El refresh token no fue encontrado.");
 
         const tokenData = verifyRefreshToken(refreshToken);
         if (!tokenData || tokenData.error) throw new CustomError('Hubo un error al refrescar el token', 400, [tokenData?.error || "El refresh token es inválido"]);
@@ -61,7 +60,7 @@ export async function controllerRefreshAccessToken(req, res) {
         const accessToken = createAccessToken({ userId: tokenData.sub, systemId: tokenData.aud });
         if (!accessToken || accessToken.error) throw new CustomError('Hubo un error al refrescar el token', 400, [tokenData?.error || "No fue posible crear el access token"]);
 
-        fetchResponse(res, { statusCode: 200, message: 'Sesión iniciada correctamente.', data: { accessToken } });
+        fetchResponse(res, { statusCode: 200, message: 'Token refrescado correctamente.', data: { accessToken } });
     } catch (error) {
         if (error instanceof CustomError) {
             const { message, httpErrorCode, errorCode } = error.toJSON();
@@ -82,13 +81,13 @@ export async function controllerLogout(req, res) {
 
         const disabledToken = await disableRefreshToken(refreshToken);
         if (!disabledToken || disabledToken.error) throw new CustomError("No se pudo desactivar el refresh token.", 400, "El token ya fue desactivado o no existe.");
+
         const cookieConfig = {
             httpOnly: true,
             secure: false,//process.env.NODE_ENV === 'production',
             sameSite: 'None',
             path: '/auth'
         }
-        console.log("🚀 ~ controllerLogout ~ cookieInfo:", cookieConfig)
 
         res.clearCookie('refreshToken', cookieConfig);
         fetchResponse(res, { statusCode: 200, message: "Sesión cerrada correctamente." });
