@@ -12,7 +12,7 @@ export async function controllerLogin(req, res) {
 
         res.cookie('refreshToken', authenticationData.refreshToken.tokenValue, {
             httpOnly: true,
-            secure: process.env.NODE_ENV === 'production',
+            secure: false, //process.env.NODE_ENV === 'production',
             expires: new Date(authenticationData.refreshToken.expirationDate),
             sameSite: 'None',
             path: '/auth'
@@ -80,13 +80,15 @@ export async function controllerLogout(req, res) {
 
         const disabledToken = await disableRefreshToken(refreshToken);
         if (!disabledToken || disabledToken.error) throw new CustomError("No se pudo desactivar el refresh token.", 400, "El token ya fue desactivado o no existe.");
-
-        res.clearCookie('refreshToken', {
+        const cookieInfo = {
             httpOnly: true,
             secure: false,//process.env.NODE_ENV === 'production',
             sameSite: 'None',
             path: '/auth'
-        });
+        }
+        console.log("🚀 ~ controllerLogout ~ cookieInfo:", cookieInfo)
+
+        res.clearCookie('refreshToken', cookieInfo);
         fetchResponse(res, { statusCode: 200, message: "Sesión cerrada correctamente." });
     } catch (error) {
         if (error instanceof CustomError) {
