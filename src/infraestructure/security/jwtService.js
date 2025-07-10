@@ -6,7 +6,7 @@ export const generateAccessToken = (payload) => {
     try {
         return jwt.sign(payload, jwtConfig.accessToken.secret, { expiresIn: jwtConfig.accessToken.expiresIn, algorithm: jwtConfig.accessToken.algorithm });
     } catch (error) {
-        return { error: "Error al generar el token de acceso" };
+        return { error: error.message || "Error al generar el token de acceso" };
     }
 }
 
@@ -14,7 +14,7 @@ export const generateRefreshToken = (payload) => {
     try {
         return jwt.sign(payload, jwtConfig.refreshToken.secret, { expiresIn: jwtConfig.refreshToken.expiresIn, algorithm: jwtConfig.refreshToken.algorithm });
     } catch (error) {
-        return { error: "Error al generar el token de actualización" };
+        return { error: error.message || "Error al generar el token de actualización" };
     }
 }
 

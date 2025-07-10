@@ -30,6 +30,7 @@ class UsersRepository {
 
             return { users, pagination };
         } catch (error) {
+            console.error(error.message)
             return { error: "No fue posible obtener los usuarios." };
         }
     }
@@ -39,7 +40,8 @@ class UsersRepository {
             const userFound = await this.#usersDb.findById(id).lean()
             return userFound ? userFound : { error: 'No existe el usuario con ese id.' }
         } catch (error) {
-            return ({ error: error.message })
+            console.error(error.message)
+            return ({ error: "No fue posible obtener el usuario por id" })
         }
     }
 
@@ -48,7 +50,8 @@ class UsersRepository {
             const userFound = await this.#usersDb.findOne({ userEmail })
             return userFound ? userFound : { error: 'No existe el usuario con ese token.' }
         } catch (error) {
-            return ({ error: error.message })
+            console.error(error.message)
+            return ({ error: "No fue posible obtener el usuario por el email" })
         }
     }
 
@@ -57,7 +60,8 @@ class UsersRepository {
             const newUser = await this.#usersDb.create(user)
             return newUser
         } catch (error) {
-            return ({ error: error.message })
+            console.error(error.message)
+            return ({ error: "No fue posible crear el usuario" })
         }
     }
 
@@ -66,7 +70,8 @@ class UsersRepository {
             const updatedUser = await this.#usersDb.findByIdAndUpdate(id, user, { new: true, runValidators: true })
             return updatedUser
         } catch (error) {
-            return ({ error: error.message })
+            console.error(error.message)
+            return ({ error: "No fue posible actualizar el usuario" })
         }
     }
 
@@ -75,7 +80,8 @@ class UsersRepository {
             const deletedUser = await this.#usersDb.findByIdAndUpdate(id, userDeletedNewData, { new: true })
             return deletedUser
         } catch (error) {
-            return ({ error: error.message })
+            console.error(error.message)
+            return ({ error: "No fue posible eliminar el usuario" })
         }
     }
 }

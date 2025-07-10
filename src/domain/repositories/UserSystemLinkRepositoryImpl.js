@@ -16,7 +16,8 @@ class UserSystemLinksRepository {
                 .lean()
             return userSystemLinkFound ? userSystemLinkFound : { error: 'No existen el vinculo' }
         } catch (error) {
-            return ({ error: error.message })
+            console.error(error.message)
+            return ({ error: "No fue posible obtener el vinculo por id" })
         }
     }
 
@@ -28,7 +29,8 @@ class UserSystemLinksRepository {
                 .lean()
             return userSystemLinkFound ? userSystemLinkFound : { error: 'El usuario no tiene acceso al sistema' }
         } catch (error) {
-            return ({ error: error.message })
+            console.error(error.message)
+            return ({ error: "No fue posible obtener el vinculo por id de usuario e id de sistema" })
         }
     }
 
@@ -54,7 +56,8 @@ class UserSystemLinksRepository {
 
             return { systems, pagination };
         } catch (error) {
-            return { error: "No fue posible obtener los sistemas." };
+            console.error(error.message)
+            return ({ error: "No fue posible obtener los vinculos por id de usuario" })
         }
     }
 
@@ -80,7 +83,8 @@ class UserSystemLinksRepository {
 
             return { users, pagination };
         } catch (error) {
-            return { error: "No fue posible obtener los usuarios." };
+            console.error(error.message)
+            return ({ error: "No fue posible obtener los vinculos por id de sistema" })
         }
     }
 
@@ -89,7 +93,8 @@ class UserSystemLinksRepository {
             const newUserSystemLink = await this.#userSystemLinksDb.create(userSystemLink)
             return newUserSystemLink
         } catch (error) {
-            return ({ error: error.message })
+            console.error(error.message)
+            return ({ error: "No fue posible crear el vinculo" })
         }
     }
 
@@ -98,7 +103,8 @@ class UserSystemLinksRepository {
             const updatedUserSystemLink = await this.#userSystemLinksDb.findByIdAndUpdate(id, userSystemLink, { new: true, runValidators: true })
             return updatedUserSystemLink
         } catch (error) {
-            return ({ error: error.message })
+            console.error(error.message)
+            return ({ error: "No fue posible actualizar el vinculo" })
         }
     }
 }

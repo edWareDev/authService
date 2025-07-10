@@ -30,6 +30,7 @@ class SystemsRepository {
 
             return { systems, pagination };
         } catch (error) {
+            console.error(error.message)
             return { error: "No fue posible obtener los usuarios." };
         }
     }
@@ -39,7 +40,8 @@ class SystemsRepository {
             const systemFound = await this.#systemsDb.findById(id).lean()
             return systemFound ? systemFound : { error: 'No existe el sistema con ese id.' }
         } catch (error) {
-            return ({ error: error.message })
+            console.error(error.message)
+            return ({ error: "No fue posible obtener el sistema por id." })
         }
     }
 
@@ -48,7 +50,8 @@ class SystemsRepository {
             const systemFound = await this.#systemsDb.findOne({ systemSecret: secret }).lean()
             return systemFound ? systemFound : { error: 'No existe el sistema con ese secret.' }
         } catch (error) {
-            return ({ error: error.message })
+            console.error(error.message)
+            return ({ error: "No fue posible obtener el sistema por secret." })
         }
     }
 
@@ -57,16 +60,19 @@ class SystemsRepository {
             const newSystem = await this.#systemsDb.create(system)
             return newSystem
         } catch (error) {
-            return ({ error: error.message })
+            console.error(error.message)
+            return ({ error: "Error al crear el sistema." })
         }
     }
+
 
     async updateSystem(id, system) {
         try {
             const updatedSystem = await this.#systemsDb.findByIdAndUpdate(id, system, { new: true, runValidators: true })
             return updatedSystem
         } catch (error) {
-            return ({ error: error.message })
+            console.error(error.message)
+            return ({ error: "Error al actualizar el sistema." })
         }
     }
 
@@ -75,7 +81,8 @@ class SystemsRepository {
             const deletedUser = await this.#systemsDb.findByIdAndUpdate(id, systemDeletedNewData, { new: true })
             return deletedUser
         } catch (error) {
-            return ({ error: error.message })
+            console.error(error.message)
+            return ({ error: "Error al eliminar el sistema." })
         }
     }
 }

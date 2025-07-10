@@ -13,7 +13,8 @@ class RefreshTokensRepository {
             const refreshTokenFound = await this.#refreshTokensDb.findOne({ tokenValue: tokenValue }).lean()
             return refreshTokenFound ? refreshTokenFound : { error: 'No existe el refresh token con ese value.' }
         } catch (error) {
-            return ({ error: error.message })
+            console.error(error.message)
+            return ({ error: "No fue posible obtener el refresh token." })
         }
     }
 
@@ -22,7 +23,8 @@ class RefreshTokensRepository {
             const newRefreshToken = await this.#refreshTokensDb.create(data)
             return newRefreshToken
         } catch (error) {
-            return ({ error: error.message })
+            console.error(error.message)
+            return { error: "No fue posible crear el refresh token." }
         }
     }
 
@@ -31,7 +33,8 @@ class RefreshTokensRepository {
             const updatedRefreshToken = await this.#refreshTokensDb.findByIdAndUpdate(id, refreshTokanData, { new: true, runValidators: true })
             return updatedRefreshToken
         } catch (error) {
-            return ({ error: error.message })
+            console.error(error.message)
+            return { error: "No fue posible actualizar el refresh token." }
         }
     }
 }
