@@ -10,7 +10,7 @@ const swaggerFile = require('../swagger_output.json');// swagger documentation f
 // import configurations and service connections
 import { connectMongoDB } from "../config/mongodb.js"; // connects to MongoDB
 import { startServer } from "../config/api-rest.js"; // starts the Express server
-// import { corsOptions } from "../config/cors-config.js"; // cors configuration
+import { corsOptions } from "../config/cors-config.js"; // cors configuration
 
 // import middlewares
 import { createLoggingMiddleware } from "./middlewares/loggingMiddleware.js"; // logging middleware
@@ -29,8 +29,7 @@ export const app = express();
 const loggingMiddleware = createLoggingMiddleware();
 
 // enable cors with custom options
-app.use(cors());
-// app.use(cors(corsOptions));
+app.use(cors(corsOptions));
 app.use(cookieParser());
 
 // parse json request bodies

@@ -4,6 +4,7 @@ const allowedOrigins = [
     'http://172.16.11.246:5173',
     'http://172.16.11.246:5174',
     'https://admin.globaltv.lat',
+    /^http:\/\/localhost:\d+$/
 ];
 
 export const corsOptions = {
