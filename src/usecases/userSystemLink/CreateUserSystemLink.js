@@ -1,5 +1,5 @@
 import { ZodError } from "zod";
-import { userSystemLinksRepository } from "../../domain/repositories/UserSystemLinkRepositoryImpl.js";
+import { userSystemLinksRepository } from "../../domain/repositories/UserSystemLinkRepository.js";
 import { UserSystemLink } from "../../domain/entities/UserSystemLink.js";
 import { createUserSystemLinkSchema } from "../../adapters/web/validators/userSystemLinkValidators.js";
 

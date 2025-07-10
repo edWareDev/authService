@@ -1,5 +1,5 @@
 import { isValidObjectId } from "mongoose";
-import { userSystemLinksRepository } from "../../domain/repositories/UserSystemLinkRepositoryImpl.js";
+import { userSystemLinksRepository } from "../../domain/repositories/UserSystemLinkRepository.js";
 
 export const getUserSystemLinksByUserIdAndSystemId = async (userId, systemId, populate) => {
     try {

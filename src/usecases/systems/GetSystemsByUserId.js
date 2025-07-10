@@ -1,5 +1,5 @@
 import { isValidObjectId } from "mongoose";
-import { userSystemLinksRepository } from "../../domain/repositories/UserSystemLinkRepositoryImpl.js";
+import { userSystemLinksRepository } from "../../domain/repositories/UserSystemLinkRepository.js";
 import { paginationSchema } from "../../adapters/web/validators/queryParams.js";
 
 export const getUserSystemLinksByUserId = async (queryParams, userId) => {
