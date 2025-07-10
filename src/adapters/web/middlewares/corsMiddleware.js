@@ -3,47 +3,37 @@ import { allowedOrigins } from "../../../../config/cors-config.js";
 const originCache = new Map();
 const CACHE_SIZE_LIMIT = 50;
 
+// Separa orígenes string y regex para búsquedas eficientes
 const { stringOrigins, regexOrigins } = (() => {
     const strings = new Set();
     const regexes = [];
-
     allowedOrigins.forEach(origin => {
-        if (typeof origin === 'string') {
-            strings.add(origin);
-        } else if (origin instanceof RegExp) {
-            regexes.push(origin);
-        }
+        if (typeof origin === 'string') strings.add(origin);
+        else if (origin instanceof RegExp) regexes.push(origin);
     });
-
     return { stringOrigins: strings, regexOrigins: regexes };
 })();
 
 function isAllowedOrigin(origin) {
     if (!origin) return false;
-
-    if (originCache.has(origin)) {
-        return originCache.get(origin);
-    }
-
+    if (originCache.has(origin)) return originCache.get(origin);
     if (stringOrigins.has(origin)) {
         cacheResult(origin, true);
         return true;
     }
-
     for (const regex of regexOrigins) {
         if (regex.test(origin)) {
             cacheResult(origin, true);
             return true;
         }
     }
-
     cacheResult(origin, false);
     return false;
 }
 
 function cacheResult(origin, result) {
     if (originCache.size >= CACHE_SIZE_LIMIT) {
-        // Eliminar el primer elemento (LRU simple)
+        // Elimina el primer elemento (LRU simple)
         const firstKey = originCache.keys().next().value;
         originCache.delete(firstKey);
     }
@@ -56,8 +46,15 @@ const CORS_HEADERS = {
     credentials: 'true'
 };
 
+function deny(res) {
+    res.status(403).send("Acceso Bloqueado por CORS").end();
+}
+
 export const corsMiddleware = (req, res, next) => {
     const origin = req.headers.origin;
+
+    // Siempre indicar que la respuesta puede variar según el Origin
+    res.set('Vary', 'Origin');
 
     if (req.method === 'OPTIONS') {
         if (origin && isAllowedOrigin(origin)) {
@@ -69,12 +66,10 @@ export const corsMiddleware = (req, res, next) => {
             });
             return res.status(200).end();
         }
-        res.status(403).send("Acceso Bloqueado por CORS").end();
+        return deny(res);
     }
 
-    if (!origin) {
-        return next();
-    }
+    if (!origin) return next();
 
     if (isAllowedOrigin(origin)) {
         res.set({
@@ -84,5 +79,5 @@ export const corsMiddleware = (req, res, next) => {
         return next();
     }
 
-    return res.status(403).send("Acceso Bloqueado por CORS").end();
+    return deny(res);
 };
