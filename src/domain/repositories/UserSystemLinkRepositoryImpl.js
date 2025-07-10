@@ -25,7 +25,7 @@ class UserSystemLinksRepository {
         try {
             const userSystemLinkFound = await this.#userSystemLinksDb
                 .findOne({ userId, systemId })
-                .populate(populate ? ["userId", "systemId"] : null)
+                .populate(populate ? ["userId", "systemId"] : [])
                 .lean()
             return userSystemLinkFound ? userSystemLinkFound : { error: 'El usuario no tiene acceso al sistema' }
         } catch (error) {
