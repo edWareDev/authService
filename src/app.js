@@ -1,5 +1,4 @@
 import express from "express";
-import cors from "cors";
 import cookieParser from "cookie-parser";
 
 import swaggerUi from "swagger-ui-express"; // for serving swagger documentation
@@ -10,7 +9,6 @@ const swaggerFile = require('../swagger_output.json');// swagger documentation f
 // import configurations and service connections
 import { connectMongoDB } from "../config/mongodb.js"; // connects to MongoDB
 import { startServer } from "../config/api-rest.js"; // starts the Express server
-import { corsOptions } from "../config/cors-config.js"; // cors configuration
 
 // import middlewares
 import { createLoggingMiddleware } from "./middlewares/loggingMiddleware.js"; // logging middleware
@@ -23,13 +21,14 @@ import { connectSQLite } from "../config/sqlite.js";
 // import { errorRouter } from "./adapters/routers/404Router.js"; // handles 404 errors
 import { validationMiddleware } from "./middlewares/validationMiddleware.js"; // token validation middleware
 import { authRouter } from "./adapters/routers/authRouter.js";
+import { corsMiddleware } from "./adapters/web/middlewares/corsMiddleware.js";
 // import { setupTaskScheduler } from "./schedulers/taskScheduler.js"; // scheduled tasks
 
 export const app = express();
 const loggingMiddleware = createLoggingMiddleware();
 
 // enable cors with custom options
-app.use(cors(corsOptions));
+app.use(corsMiddleware);
 app.use(cookieParser());
 
 // parse json request bodies
