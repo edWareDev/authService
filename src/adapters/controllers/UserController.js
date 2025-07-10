@@ -5,6 +5,8 @@ import { createUser } from './../../usecases/users/CreateUser.js';
 import { updateUser } from "../../usecases/users/UpdateUser.js";
 import { getUserById } from "../../usecases/users/GetUserById.js";
 import { deleteUser } from "../../usecases/users/DeleteUser.js";
+import { getSystemById } from "../../usecases/systems/GetSystemById.js";
+import { getUserSystemLinksBySystemId } from "../../usecases/users/GetUsersBySystemId.js";
 
 export async function controllerGetUsers(req, res) {
     try {
@@ -36,6 +38,26 @@ export async function controllerGetUserById(req, res) {
     }
 }
 
+export async function controllerGetUsersBySystemId(req, res) {
+    try {
+        const systemFound = await getSystemById(req.params.Id);
+        if (systemFound.error) throw new CustomError('Hubo un error al encontrar el usuario.', 404, systemFound.error);
+
+        const populate = (String(req.query?.populate).trim() === 'true' ? true : false);
+        const usersFound = await getUserSystemLinksBySystemId(req.query, systemFound._id, populate)
+        if (usersFound.error) throw new CustomError('Error al obtener los usuarios.', 404, usersFound.error);
+
+        fetchResponse(res, { statusCode: 200, message: 'Usuarios encontrados correctamente.', errorCode: null, data: usersFound });
+    } catch (error) {
+        if (error instanceof CustomError) {
+            const { message, httpErrorCode, errorCode } = error.toJSON();
+            fetchResponse(res, { statusCode: httpErrorCode, message, errorCode });
+        } else {
+            fetchResponse(res, { statusCode: 500, errorCode: "ERR_UNEXPECTED", message: "Ha ocurrido un error inesperado" });
+        }
+    }
+}
+
 export async function controllerCreateUser(req, res) {
     try {
         const newUser = await createUser(req.body)
@@ -45,7 +67,7 @@ export async function controllerCreateUser(req, res) {
         if (error instanceof CustomError) {
             const { message, httpErrorCode, errorCode } = error.toJSON();
             if (String(errorCode).includes('duplicate')) {
-                fetchResponse(res, { statusCode: httpErrorCode, message, errorCode: "El correo electrónico ya está en uso." });
+                fetchResponse(res, { statusCode: httpErrorCode, message, errorCode: "El correo electrónico o dni ya está en uso." });
             } else {
                 fetchResponse(res, { statusCode: httpErrorCode, message, errorCode });
             }
@@ -64,7 +86,7 @@ export async function controllerUpdateUser(req, res) {
         if (error instanceof CustomError) {
             const { message, httpErrorCode, errorCode } = error.toJSON();
             if (String(errorCode).includes('duplicate')) {
-                fetchResponse(res, { statusCode: httpErrorCode, message, errorCode: "El correo electrónico ya está en uso." });
+                fetchResponse(res, { statusCode: httpErrorCode, message, errorCode: "El correo electrónico o dni ya está en uso." });
             } else {
                 fetchResponse(res, { statusCode: httpErrorCode, message, errorCode });
             }

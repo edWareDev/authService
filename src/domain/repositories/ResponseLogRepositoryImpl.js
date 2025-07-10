@@ -43,7 +43,8 @@ class ResponseLogRepository {
             if (!responseLogFound) throw new Error("No existe el response con ese ID.");
             return responseLogFound;
         } catch (error) {
-            return { error: error.message };
+            console.error(error.message);
+            return { error: "No fue posible obtener el response log por request id" };
         }
     }
 
@@ -51,7 +52,9 @@ class ResponseLogRepository {
         try {
             return await this.#responseLogsDb.create(log);
         } catch (error) {
-            return { error: error.message };
+            console.error(error.message);
+            return { error: "No fue posible crear el response log" };
+
         }
     }
 }

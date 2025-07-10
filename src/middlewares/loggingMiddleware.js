@@ -1,7 +1,8 @@
 import { createRequestLog } from '../usecases/logs/CreateRequestLog.js';
 import { createResponseLog } from '../usecases/logs/CreateResponseLog.js';
 import { nanoid } from 'nanoid';
-import { getUserByToken } from '../usecases/users/GetUserByToken.js';
+import { verifyAccessToken } from '../infraestructure/security/jwtService.js';
+import { getUserById } from '../usecases/users/GetUserById.js';
 
 // Constante para el texto de reemplazo
 const PROTECTED = '[PROTECTED]';
@@ -174,8 +175,11 @@ export const createLoggingMiddleware = () => {
             let user = null;
             const token = req.headers?.authorization?.split(" ")[1];
             if (token) {
-                user = await getUserByToken(token);
-                if (user.error) user = null;
+                const accessTokenData = verifyAccessToken(token);
+                if (accessTokenData) {
+                    user = await getUserById(accessTokenData.userId);
+                    if (user.error) user = null; // Si hay error al obtener el usuario, lo dejamos como null
+                }
             }
 
             await createRequestLog({

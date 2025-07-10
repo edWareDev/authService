@@ -31,10 +31,10 @@ export const ResponseLog = sequelize.define("ResponseLog", {
         allowNull: true,
     }
 }, {
-    tableName: "responseLogs",
     timestamps: false,
     indexes: [
         { fields: ["requestId"] },
         { fields: ["timestamp"] },
-    ]
+    ],
+    tableName: "responseLogs"
 });

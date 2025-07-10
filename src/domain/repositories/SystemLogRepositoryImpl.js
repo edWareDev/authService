@@ -31,7 +31,7 @@ class SystemLogRepository {
                 },
             };
         } catch (error) {
-            console.error(error);
+            console.error(error.message)
             return { error: "No fue posible obtener los app logs" };
         }
     }
@@ -40,7 +40,8 @@ class SystemLogRepository {
         try {
             return await this.#systemLogDb.create(log);
         } catch (error) {
-            return { error: error.message };
+            console.error(error.message)
+            return { error: "No fue posible crear el log de sistema" };
         }
     }
 }

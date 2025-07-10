@@ -4,8 +4,13 @@ export const createUserSchema = z.object({
     name: z
         .string({ required_error: "El nombre es requerido" })
         .trim()
-        .min(8, { message: "El nombre debería tener por lo menos 8 caracteres" })
+        .min(3, { message: "El nombre debería tener por lo menos 3 caracteres" })
         .max(50, { message: "El nombre no puede tener más de 50 caracteres" }),
+    dni: z
+        .string({ required_error: "El DNI es requerido" })
+        .trim()
+        .length(8, { message: "El DNI debe tener exactamente 8 caracteres" })
+        .regex(/^\d+$/, { message: "El DNI debe contener solo números" }),
     email: z
         .string({ required_error: "El correo es requerido" })
         .email({ message: "Correo inválido" })
@@ -20,7 +25,7 @@ export const createUserSchema = z.object({
         .regex(/\d/, { message: "La contraseña debe contener al menos un número" })
         .regex(/[@$!%*?&#]/, { message: "La contraseña debe contener al menos un carácter especial (@,$,!,%,*,?,&,#)" }),
     role: z
-        .enum(["administrator", "contentManager", "monitor"], { message: "El rol ingresado no es válido" }),
+        .enum(["administrator", "user"], { message: "El rol ingresado no es válido" }),
     isActive: z
         .boolean()
         .optional()
@@ -32,6 +37,12 @@ export const updateUserSchema = z.object({
         .transform(val => val?.trim())
         .refine(val => !val || val.length >= 8, { message: "El nombre debería tener por lo menos 8 caracteres" })
         .refine(val => !val || val.length <= 50, { message: "El nombre no puede tener más de 50 caracteres" })
+        .optional(),
+    dni: z
+        .string({ required_error: "El DNI es requerido" })
+        .trim()
+        .length(8, { message: "El DNI debe tener exactamente 8 caracteres" })
+        .regex(/^\d+$/, { message: "El DNI debe contener solo números" })
         .optional(),
     email: z
         .string()
@@ -49,7 +60,7 @@ export const updateUserSchema = z.object({
         .refine(val => !val || /[@$!%*?&#]/.test(val), { message: "La contraseña debe contener al menos un carácter especial (@,$,!,%,*,?,&,#)" })
         .optional(),
     role: z
-        .enum(["administrator", "contentManager", "monitor"])
+        .enum(["administrator", "user"], { message: "El rol ingresado no es válido" })
         .optional(),
     isActive: z
         .boolean()

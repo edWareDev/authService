@@ -1,19 +1,23 @@
-import { getUserByToken } from "../usecases/users/GetUserByToken.js";
+import { validateAccessToken } from "../usecases/accessToken/ValidateAccessToken.js";
+import { getUserById } from "../usecases/users/GetUserById.js";
 import { CustomError } from "../utils/CustomError.js";
 import { fetchResponse } from "../utils/fetchResponse.js";
 
 
-export const validateBearerToken = async (req, res, next) => {
+export const validationMiddleware = async (req, res, next) => {
     try {
-        const authHeader = req.headers['authorization'];
-        if (!authHeader) throw new CustomError('Error al obtener los datos.', 401, ["Token de autenticación no encontrado."]);
+        const accessTokenData = validateAccessToken(req);
 
-        const token = authHeader.split(' ')[1];
-        if (!token || token.length !== 40) throw new CustomError('Error al obtener los datos.', 403, ["Token de autenticación inválido."]);
+        const fechaActual = new Date();
+        const fechaCreacion = new Date(accessTokenData.iat * 1000);
+        const fechaExpiracion = new Date(accessTokenData.exp * 1000);
 
-        const userFound = await getUserByToken(token);
+        if (fechaExpiracion < fechaActual) throw new CustomError('Error al obtener los datos.', 401, ["Token de autenticación expirado."]);
+        if (fechaCreacion > fechaActual) throw new CustomError('Error al obtener los datos.', 401, ["Token de autenticación inválido."]);
+
+        const userFound = await getUserById(accessTokenData.userId);
         if (!userFound) throw new CustomError('Error al obtener los datos.', 404, ["Usuario no encontrado."]);
-        if (userFound.error) throw new CustomError('Hubo un error en la solicitud.', 401, ['Acceso no autorizado']);
+        if (userFound.error) throw new CustomError('Hubo un error en la solicitud.', 400, ['Acceso no autorizado']);
         if (!userFound.userIsActive || userFound.deletedAt) throw new CustomError('Error al obtener los datos.', 403, ["El usuario no está activo."]);
 
         req.user = userFound;
