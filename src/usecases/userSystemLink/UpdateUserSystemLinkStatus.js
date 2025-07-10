@@ -1,8 +1,8 @@
 import { isValidObjectId } from "mongoose";
 import { getUserSystemLinkById } from "./GetUserSystemLinkById.js";
-import { userSystemLinksRepository } from "../../domain/repositories/UserSystemLinkRepository.js";
 import { UserSystemLink } from "../../domain/entities/UserSystemLink.js";
 import { updateUserSystemLinkSchema } from "../../adapters/web/validators/userSystemLinkValidators.js";
+import { userSystemLinksRepository } from "../../domain/repositories/UserSystemLinkRepositoryImpl.js";
 
 const isValidStatus = (value) => {
     if (typeof value === "boolean") return true;
