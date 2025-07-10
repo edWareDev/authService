@@ -10,8 +10,23 @@ class UserSystemLinksRepository {
 
     async getUserSystemLinkById(id) {
         try {
-            const userSystemLinkFound = await this.#userSystemLinksDb.findById(id).populate("userId").populate("systemId").lean()
+            const userSystemLinkFound = await this.#userSystemLinksDb
+                .findById(id)
+                .populate(["userId", "systemId"])
+                .lean()
             return userSystemLinkFound ? userSystemLinkFound : { error: 'No existen el vinculo' }
+        } catch (error) {
+            return ({ error: error.message })
+        }
+    }
+
+    async getUserSystemLinksByUserIdAndSystemId(userId, systemId, populate) {
+        try {
+            const userSystemLinkFound = await this.#userSystemLinksDb
+                .findOne({ userId, systemId })
+                .populate(populate ? ["userId", "systemId"] : null)
+                .lean()
+            return userSystemLinkFound ? userSystemLinkFound : { error: 'El usuario no tiene acceso al sistema' }
         } catch (error) {
             return ({ error: error.message })
         }
@@ -66,15 +81,6 @@ class UserSystemLinksRepository {
             return { users, pagination };
         } catch (error) {
             return { error: "No fue posible obtener los usuarios." };
-        }
-    }
-
-    async getUserSystemLinksByUserIdAndSystemId(userId, systemId) {
-        try {
-            const userSystemLinkFound = await this.#userSystemLinksDb.findOne({ userId, systemId }).populate("userId").populate("systemId").lean()
-            return userSystemLinkFound ? userSystemLinkFound : { error: 'El usuario no tiene acceso al sistema' }
-        } catch (error) {
-            return ({ error: error.message })
         }
     }
 

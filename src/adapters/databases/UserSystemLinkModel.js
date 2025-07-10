@@ -13,9 +13,11 @@ export const UserSystemLinkSchema = new Schema({
         required: true,
         index: true
     },
-    linkIsActive: {
+    userSystemLinkIsActive: {
         type: Boolean,
         required: true,
         default: true
     }
 }, { versionKey: false, timestamps: true, collection: 'userSystemLinks' });
+
+UserSystemLinkSchema.index({ userId: 1, systemId: 1 }, { unique: true });

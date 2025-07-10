@@ -1,15 +1,17 @@
 import { ZodError } from "zod";
 import { userSystemLinksRepository } from "../../domain/repositories/UserSystemLinkRepositoryImpl.js";
 import { UserSystemLink } from "../../domain/entities/UserSystemLink.js";
+import { createUserSystemLinkSchema } from "../../adapters/web/validators/userSystemLinkValidators.js";
 
 
-export const createUserSystemLink = async ({ userId, systemId, linkIsActive }) => {
+export const createUserSystemLink = async (data) => {
     try {
+        const { user, system, isActive } = createUserSystemLinkSchema.parse(data)
 
         const tempUserSystemLink = new UserSystemLink({
-            userId,
-            systemId,
-            linkIsActive
+            userId: user,
+            systemId: system,
+            userSystemLinkIsActive: isActive
         })
 
         const userSystemLink = await userSystemLinksRepository.createUserSystemLink(tempUserSystemLink);
