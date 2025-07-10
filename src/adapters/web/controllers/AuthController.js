@@ -83,7 +83,7 @@ export async function controllerLogout(req, res) {
 
         res.clearCookie('refreshToken', {
             httpOnly: true,
-            secure: process.env.NODE_ENV === 'production',
+            secure: false,//process.env.NODE_ENV === 'production',
             sameSite: 'None',
             path: '/auth'
         });
