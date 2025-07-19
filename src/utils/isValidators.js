@@ -1,6 +1,6 @@
 export const isValidImageUrl = (str) => {
     // Regular expression to validate a URL format
-    const urlPattern = /^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})([\/\w.-]*)*\/?$/;
+    const urlPattern = /^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})([\\/\w.-]*)*\/?$/;
 
     // Regular expression to validate image file extensions
     const imageExtensionsPattern = /\.(png|jpg|jpeg|webp)$/i;
@@ -18,7 +18,7 @@ export const isValidImageUrl = (str) => {
         console.error("Error validating URL:", error);
         return false;
     }
-}
+};
 
 /**
  * Valida si una cadena es una imagen base64 válida y retorna su buffer

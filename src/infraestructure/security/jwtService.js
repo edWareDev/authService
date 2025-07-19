@@ -1,4 +1,4 @@
-import jwt from "jsonwebtoken"
+import jwt from "jsonwebtoken";
 import { jwtConfig } from "../../../config/jwtConfig.js";
 
 
@@ -8,7 +8,7 @@ export const generateAccessToken = (payload) => {
     } catch (error) {
         return { error: error.message || "Error al generar el token de acceso" };
     }
-}
+};
 
 export const generateRefreshToken = (payload) => {
     try {
@@ -16,7 +16,7 @@ export const generateRefreshToken = (payload) => {
     } catch (error) {
         return { error: error.message || "Error al generar el token de actualización" };
     }
-}
+};
 
 export const verifyAccessToken = (token) => {
     try {
@@ -24,7 +24,7 @@ export const verifyAccessToken = (token) => {
     } catch (error) {
         return { error: error.message || "Error al verificar el access token" };
     }
-}
+};
 
 export const verifyRefreshToken = (token) => {
     try {
@@ -32,4 +32,4 @@ export const verifyRefreshToken = (token) => {
     } catch (error) {
         return { error: error.message || "Error al verificar el refresh token" };
     }
-}
+};

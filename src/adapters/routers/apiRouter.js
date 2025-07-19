@@ -6,10 +6,10 @@ import { userSystemLinksRouter } from "./linksRouter.js";
 
 const systemInfo = new SystemInfo();
 
-export const apiRouter = Router()
-systemInfo.setApiStatus(true)
+export const apiRouter = Router();
+systemInfo.setApiStatus(true);
 
-apiRouter.use('/users', usersRouter)
-apiRouter.use('/systems', systemsRouter)
-apiRouter.use('/links', userSystemLinksRouter)
+apiRouter.use('/users', usersRouter);
+apiRouter.use('/systems', systemsRouter);
+apiRouter.use('/links', userSystemLinksRouter);
 // apiRouter.use('/logs', logsRouter)

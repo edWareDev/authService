@@ -4,17 +4,17 @@ import { userSystemLinksRepository } from "../../domain/repositories/UserSystemL
 export const getUserSystemLinksByUserIdAndSystemId = async (userId, systemId, populate) => {
     try {
 
-        const sanitizedUserId = String(userId).trim()
+        const sanitizedUserId = String(userId).trim();
         if (!isValidObjectId(sanitizedUserId)) throw new Error('El id ingresado no es válido.');
 
-        const sanitizedSystemId = String(systemId).trim()
+        const sanitizedSystemId = String(systemId).trim();
         if (!isValidObjectId(sanitizedSystemId)) throw new Error('El id ingresado no es válido.');
 
         const linkFound = await userSystemLinksRepository.getUserSystemLinksByUserIdAndSystemId(sanitizedUserId, sanitizedSystemId, populate);
         if (linkFound.error) throw new Error(linkFound.error);
 
         return linkFound;
-    } catch (error) {
-        return { error: error.message };
+    } catch (e) {
+        return { error: e.message };
     }
-}
+};

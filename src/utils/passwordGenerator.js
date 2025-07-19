@@ -11,4 +11,4 @@ export const generatePassword = (length) => {
         password += allCharacters[randomIndex];
     }
     return password;
-}
+};

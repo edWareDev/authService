@@ -1,4 +1,6 @@
-export const fetchResponse = (res, { statusCode = 200, message = null, errorCode = null, data = null }) => {
+import { HTTP_CODES } from "./http_error_codes.js";
+
+export const fetchResponse = (res, { statusCode = HTTP_CODES._200_OK, message = null, errorCode = null, data = null }) => {
     const responseBody = {
         statusCode,
         message,

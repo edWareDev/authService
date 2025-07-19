@@ -1,8 +1,8 @@
-import { createRequestLog } from '../usecases/logs/CreateRequestLog.js';
-import { createResponseLog } from '../usecases/logs/CreateResponseLog.js';
+import { createRequestLog } from '../../../usecases/logs/CreateRequestLog.js';
+import { createResponseLog } from '../../../usecases/logs/CreateResponseLog.js';
 import { nanoid } from 'nanoid';
-import { verifyAccessToken } from '../infraestructure/security/jwtService.js';
-import { getUserById } from '../usecases/users/GetUserById.js';
+import { verifyAccessToken } from '../../../infraestructure/security/jwtService.js';
+import { getUserById } from '../../../usecases/users/GetUserById.js';
 
 // Constante para el texto de reemplazo
 const PROTECTED = '[PROTECTED]';
@@ -197,7 +197,7 @@ export const createLoggingMiddleware = () => {
             const originalSend = res.send;
             res.send = async function (body) {
                 const responseTime = Date.now() - startTime;
-                const sanitizedBody = sanitizeBody(body)
+                const sanitizedBody = sanitizeBody(body);
                 await createResponseLog({
                     requestId,
                     responseTime,
@@ -205,7 +205,7 @@ export const createLoggingMiddleware = () => {
                     statusCode: sanitizedBody.statusCode,
                     errorCode: sanitizedBody.errorCode || null,
                     message: sanitizedBody.message
-                })
+                });
 
                 return originalSend.apply(res, arguments);
             };

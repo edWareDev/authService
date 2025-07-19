@@ -4,17 +4,17 @@ import { paginationSchema } from '../../adapters/web/validators/queryParams.js';
 
 export const getUsers = async (queryParams) => {
     try {
-        const { page, limit } = paginationSchema.parse(queryParams)
+        const { page, limit } = paginationSchema.parse(queryParams);
         const skip = (page - 1) * limit;
         const allUsers = await usersRepository.getUsers({ page, limit, skip });
         return allUsers;
-    } catch (error) {
-        if (error instanceof ZodError) {
-            return { error: JSON.parse(error.message).map(error => error.message) };
-        } else if (String(error.message).includes('[')) {
-            return { error: JSON.parse(error.message).map(error => error) };
+    } catch (e) {
+        if (e instanceof ZodError) {
+            return { error: JSON.parse(e.message).map(error => error.message) };
+        } else if (String(e.message).includes('[')) {
+            return { error: JSON.parse(e.message).map(error => error) };
         } else {
-            return { error: error.message };
+            return { error: e.message };
         }
     }
-}
+};

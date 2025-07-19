@@ -7,30 +7,30 @@ import { systemsRepository } from "../../domain/repositories/SystemRepositoryImp
 
 export const updateSystem = async (data, id) => {
     try {
-        const sanitizedId = String(id).trim()
+        const sanitizedId = String(id).trim();
         if (!isValidObjectId(sanitizedId)) throw new Error('El id ingresado no es válido.');
 
-        const systemFound = await getSystemById(sanitizedId)
+        const systemFound = await getSystemById(sanitizedId);
         if (!systemFound) throw new Error('El sistema no existe.');
         if (systemFound.error) throw new Error(systemFound.error);
 
-        const { name, isActive } = updateSystemSchema.parse(data)
+        const { name, isActive } = updateSystemSchema.parse(data);
         const systemNewData = new System({
             systemName: (typeof name !== 'undefined') ? String(name).trim() : systemFound.systemName,
             systemSecret: systemFound.systemSecret,
             systemIsActive: (typeof isActive !== 'undefined') ? isActive : systemFound.systemIsActive,
-        })
+        });
 
         const system = await systemsRepository.updateSystem(sanitizedId, systemNewData);
 
         return system;
-    } catch (error) {
-        if (error instanceof ZodError) {
-            return { error: JSON.parse(error.message).map(error => error.message) };
-        } else if (String(error.message).includes('[')) {
-            return { error: JSON.parse(error.message).map(error => error) };
+    } catch (e) {
+        if (e instanceof ZodError) {
+            return { error: JSON.parse(e.message).map(error => error.message) };
+        } else if (String(e.message).includes('[')) {
+            return { error: JSON.parse(e.message).map(error => error) };
         } else {
-            return { error: error.message };
+            return { error: e.message };
         }
     }
-}
+};

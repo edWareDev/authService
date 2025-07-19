@@ -1,4 +1,5 @@
 import { allowedOrigins } from "../../../../config/cors-config.js";
+import { HTTP_CODES } from "../../../utils/http_error_codes.js";
 
 const originCache = new Map();
 const CACHE_SIZE_LIMIT = 50;
@@ -47,7 +48,7 @@ const CORS_HEADERS = {
 };
 
 function deny(res) {
-    res.status(403).send("Acceso Bloqueado por CORS").end();
+    res.status(HTTP_CODES._403_FORBIDDEN).send("Acceso Bloqueado por CORS").end();
 }
 
 export const corsMiddleware = (req, res, next) => {
@@ -64,7 +65,7 @@ export const corsMiddleware = (req, res, next) => {
                 'Access-Control-Allow-Headers': CORS_HEADERS.headers,
                 'Access-Control-Allow-Credentials': CORS_HEADERS.credentials
             });
-            return res.status(200).end();
+            return res.status(HTTP_CODES._200_OK).end();
         }
         return deny(res);
     }

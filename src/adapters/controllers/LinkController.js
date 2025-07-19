@@ -4,11 +4,12 @@ import { getUserSystemLinkById } from "../../usecases/userSystemLink/GetUserSyst
 import { getUserSystemLinksByUserIdAndSystemId } from "../../usecases/userSystemLink/GetUserSystemLinkByUserIdAndSystemId.js";
 import { CustomError } from "../../utils/CustomError.js";
 import { fetchResponse } from "../../utils/fetchResponse.js";
+import { HTTP_CODES } from "../../utils/http_error_codes.js";
 
 export async function controllerGetUserSystemLinkById(req, res) {
     try {
         const userSystemLinkFound = await getUserSystemLinkById(req.params.Id);
-        if (userSystemLinkFound.error) throw new CustomError('Hubo un error al encontrar el vínculo.', 404, userSystemLinkFound.error);
+        if (userSystemLinkFound.error) throw new CustomError('Hubo un error al encontrar el vínculo.', HTTP_CODES._404_NOT_FOUND, userSystemLinkFound.error);
         fetchResponse(res, { statusCode: 200, message: 'Vínculo encontrado correctamente.', errorCode: null, data: userSystemLinkFound });
     } catch (error) {
         if (error instanceof CustomError) {
@@ -24,7 +25,7 @@ export async function controllerGetUserSystemLinkByUserIdAndSystemId(req, res) {
     try {
         const populate = (String(req.query?.populate).trim() === 'true' ? true : false);
         const userSystemLinkFound = await getUserSystemLinksByUserIdAndSystemId(req.params.UserId, req.params.SystemId, populate);
-        if (userSystemLinkFound.error) throw new CustomError('Hubo un error al encontrar el vínculo.', 404, userSystemLinkFound.error);
+        if (userSystemLinkFound.error) throw new CustomError('Hubo un error al encontrar el vínculo.', HTTP_CODES._404_NOT_FOUND, userSystemLinkFound.error);
         fetchResponse(res, { statusCode: 200, message: 'Vínculo encontrado correctamente.', errorCode: null, data: userSystemLinkFound });
     } catch (error) {
         if (error instanceof CustomError) {
@@ -38,8 +39,8 @@ export async function controllerGetUserSystemLinkByUserIdAndSystemId(req, res) {
 
 export async function controllerCreateUserSystemLink(req, res) {
     try {
-        const newUserSystemLink = await createUserSystemLink(req.body)
-        if (newUserSystemLink.error) throw new CustomError('Error al crear el vínculo', 400, newUserSystemLink.error);
+        const newUserSystemLink = await createUserSystemLink(req.body);
+        if (newUserSystemLink.error) throw new CustomError('Error al crear el vínculo', HTTP_CODES._400_BAD_REQUEST, newUserSystemLink.error);
         fetchResponse(res, { statusCode: 201, message: 'Vínculo creado correctamente.', errorCode: null, data: newUserSystemLink });
     } catch (error) {
         if (error instanceof CustomError) {
@@ -58,7 +59,7 @@ export async function controllerCreateUserSystemLink(req, res) {
 export async function controllerUpdateUserSystemLinkStatus(req, res) {
     try {
         const systemUpdated = await UpdateUserSystemLinkStatus(req.params.Id, req.body?.isActive);
-        if (systemUpdated.error) throw new CustomError('Error al actualizar el sistema.', 400, systemUpdated.error);
+        if (systemUpdated.error) throw new CustomError('Error al actualizar el sistema.', HTTP_CODES._400_BAD_REQUEST, systemUpdated.error);
         fetchResponse(res, { statusCode: 201, message: 'Sistema actualizado correctamente.', errorCode: null, data: systemUpdated });
     } catch (error) {
         if (error instanceof CustomError) {

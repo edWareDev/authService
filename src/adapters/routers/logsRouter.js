@@ -4,4 +4,4 @@ import { controllerGetAllLogs } from "../controllers/LogController.js";
 export const logsRouter = Router();
 
 // RUTAS GET
-logsRouter.get('/', controllerGetAllLogs)
+logsRouter.get('/', controllerGetAllLogs);

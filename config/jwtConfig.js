@@ -1,10 +1,10 @@
-const JWT_SECRET_KEY = process.env.JWT_SECRET_KEY || 'your-super-secret-jwt-key';
+const JWT_ACCESS_KEY = process.env.JWT_ACCESS_KEY || 'your-super-secret-jwt-key';
 const JWT_REFRESH_KEY = process.env.JWT_REFRESH_KEY || 'your-super-secret-refresh-key';
 const JWT_ALGORITHM = process.env.JWT_ALGORITHM || 'HS256';
 
 export const jwtConfig = {
     accessToken: {
-        secret: JWT_SECRET_KEY,
+        secret: JWT_ACCESS_KEY,
         expiresIn: '1h',
         algorithm: JWT_ALGORITHM
     },

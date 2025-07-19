@@ -4,17 +4,17 @@ import { systemsRepository } from "../../domain/repositories/SystemRepositoryImp
 
 export const getSystems = async (queryParams) => {
     try {
-        const { page, limit } = paginationSchema.parse(queryParams)
+        const { page, limit } = paginationSchema.parse(queryParams);
         const skip = (page - 1) * limit;
         const allSystems = await systemsRepository.getSystems({ page, limit, skip });
         return allSystems;
-    } catch (error) {
-        if (error instanceof ZodError) {
-            return { error: JSON.parse(error.message).map(error => error.message) };
-        } else if (String(error.message).includes('[')) {
-            return { error: JSON.parse(error.message).map(error => error) };
+    } catch (e) {
+        if (e instanceof ZodError) {
+            return { error: JSON.parse(e.message).map(error => error.message) };
+        } else if (String(e.message).includes('[')) {
+            return { error: JSON.parse(e.message).map(error => error) };
         } else {
-            return { error: error.message };
+            return { error: e.message };
         }
     }
-}
+};

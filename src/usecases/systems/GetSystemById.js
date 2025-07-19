@@ -3,7 +3,7 @@ import { systemsRepository } from "../../domain/repositories/SystemRepositoryImp
 
 export const getSystemById = async (id) => {
     try {
-        const sanitizedId = String(id).trim()
+        const sanitizedId = String(id).trim();
         if (!isValidObjectId(sanitizedId)) throw new Error('El id ingresado no es válido.');
 
         const systemFound = await systemsRepository.getSystemById(sanitizedId);
@@ -13,4 +13,4 @@ export const getSystemById = async (id) => {
     } catch (error) {
         return { error: error.message };
     }
-}
+};

@@ -1,5 +1,7 @@
+import { HTTP_CODES } from "./http_error_codes.js";
+
 export class CustomError extends Error {
-    constructor(message, httpErrorCode = 500, errorCode = "ERR_UNKNOWN") {
+    constructor(message, httpErrorCode = HTTP_CODES._500_INTERNAL_SERVER_ERROR, errorCode = "ERR_UNKNOWN") {
         super(message);
         this.name = this.constructor.name;
         this.httpErrorCode = httpErrorCode;

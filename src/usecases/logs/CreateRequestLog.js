@@ -6,23 +6,23 @@ import { SystemInfo } from "../../../config/systemInfo.js";
 import { SystemConfig } from "../../../config/systemConfig.js";
 
 const systemInfo = new SystemInfo();
-const systemConfig = new SystemConfig()
+const systemConfig = new SystemConfig();
 
 export const createRequestLog = async (data) => {
     try {
         if (systemConfig._SAVE_LOGS && systemInfo._LOG_DB_STATUS) {
-            const tempRequestLog = new RequestLog(createRequestLogSchema.parse(data))
+            const tempRequestLog = new RequestLog(createRequestLogSchema.parse(data));
             const requestLog = await requestLogsRepository.createRequestLog(tempRequestLog);
             if (requestLog.error) throw new Error(requestLog.error);
         }
 
-    } catch (error) {
-        if (error instanceof ZodError) {
-            return { error: JSON.parse(error.message).map(error => error.message) };
-        } else if (String(error.message).includes('[')) {
-            return { error: JSON.parse(error.message).map(error => error) };
+    } catch (e) {
+        if (e instanceof ZodError) {
+            return { error: JSON.parse(e.message).map(error => error.message) };
+        } else if (String(e.message).includes('[')) {
+            return { error: JSON.parse(e.message).map(error => error) };
         } else {
-            return { error: error.message };
+            return { error: e.message };
         }
     }
-}
+};
