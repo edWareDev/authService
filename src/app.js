@@ -18,10 +18,10 @@ import { apiRouter } from "./adapters/routers/apiRouter.js"; // main api routes
 import { healthRouter } from "./adapters/routers/healthRouter.js"; // server health check routes
 import { connectSQLite } from "../config/sqlite.js";
 
-import { validationMiddleware } from "./middlewares/validationMiddleware.js"; // token validation middleware
 import { authRouter } from "./adapters/routers/authRouter.js";
 import { corsMiddleware } from "./adapters/web/middlewares/corsMiddleware.js";
 import { HTTP_CODES } from "./utils/http_error_codes.js";
+import { validationMiddleware } from "./adapters/web/middlewares/validationMiddleware.js";
 
 export const app = express();
 const loggingMiddleware = createLoggingMiddleware();

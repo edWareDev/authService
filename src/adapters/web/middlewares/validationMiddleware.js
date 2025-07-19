@@ -1,9 +1,8 @@
+import { validateAccessToken } from "../../../usecases/accessToken/ValidateAccessToken.js";
+import { getUserById } from "../../../usecases/users/GetUserById.js";
+import { CustomError } from "../../../utils/CustomError.js";
+import { fetchResponse } from "../../../utils/fetchResponse.js";
 import { HTTP_CODES } from "../../../utils/http_error_codes.js";
-import { validateAccessToken } from "../usecases/accessToken/ValidateAccessToken.js";
-import { getUserById } from "../usecases/users/GetUserById.js";
-import { CustomError } from "../utils/CustomError.js";
-import { fetchResponse } from "../utils/fetchResponse.js";
-
 
 export const validationMiddleware = async (req, res, next) => {
     try {
