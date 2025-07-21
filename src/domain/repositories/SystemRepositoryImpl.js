@@ -4,8 +4,8 @@ import { SystemSchema } from "../../adapters/databases/SystemModel.js";
 class SystemsRepository {
     #systemsDb;
 
-    constructor(modelSchema) {
-        this.#systemsDb = modelSchema;
+    constructor() {
+        this.#systemsDb = model("Systems", SystemSchema);
     }
 
     async getSystems({ page, limit, skip }) {
@@ -65,7 +65,6 @@ class SystemsRepository {
         }
     }
 
-
     async updateSystem(id, system) {
         try {
             const updatedSystem = await this.#systemsDb.findByIdAndUpdate(id, system, { new: true, runValidators: true });
@@ -87,5 +86,4 @@ class SystemsRepository {
     }
 }
 
-const systemModelInstance = model('systems', SystemSchema);
-export const systemsRepository = new SystemsRepository(systemModelInstance);
+export const systemsRepository = new SystemsRepository();

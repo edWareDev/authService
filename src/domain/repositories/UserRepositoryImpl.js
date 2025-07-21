@@ -4,8 +4,8 @@ import { UserSchema } from './../../adapters/databases/UserModel.js';
 class UsersRepository {
     #usersDb;
 
-    constructor(modelSchema) {
-        this.#usersDb = modelSchema;
+    constructor() {
+        this.#usersDb = model("Users", UserSchema);
     }
 
     async getUsers({ page, limit, skip }) {
@@ -86,5 +86,4 @@ class UsersRepository {
     }
 }
 
-const userModelInstance = model('users', UserSchema);
-export const usersRepository = new UsersRepository(userModelInstance);
+export const usersRepository = new UsersRepository();

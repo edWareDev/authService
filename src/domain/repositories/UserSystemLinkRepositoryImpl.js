@@ -4,8 +4,8 @@ import { UserSystemLinkSchema } from "../../adapters/databases/UserSystemLinkMod
 class UserSystemLinksRepository {
     #userSystemLinksDb;
 
-    constructor(modelSchema) {
-        this.#userSystemLinksDb = modelSchema;
+    constructor() {
+        this.#userSystemLinksDb = model("UserSystemLinks", UserSystemLinkSchema);
     }
 
     async getUserSystemLinkById(id) {
@@ -111,5 +111,4 @@ class UserSystemLinksRepository {
     }
 }
 
-const systemModelInstance = model('userSystemLinks', UserSystemLinkSchema);
-export const userSystemLinksRepository = new UserSystemLinksRepository(systemModelInstance);
+export const userSystemLinksRepository = new UserSystemLinksRepository();

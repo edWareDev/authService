@@ -4,8 +4,8 @@ import { RefreshTokenSchema } from "../../adapters/databases/RefreshTokenModel.j
 class RefreshTokensRepository {
     #refreshTokensDb;
 
-    constructor(modelSchema) {
-        this.#refreshTokensDb = modelSchema;
+    constructor() {
+        this.#refreshTokensDb = model("RefreshTokens", RefreshTokenSchema);
     }
 
     async getRefreshTokenByValue(tokenValue) {
@@ -39,5 +39,4 @@ class RefreshTokensRepository {
     }
 }
 
-const refreshTokenModelInstance = model('refreshTokens', RefreshTokenSchema);
-export const refreshTokensRepository = new RefreshTokensRepository(refreshTokenModelInstance);
+export const refreshTokensRepository = new RefreshTokensRepository();
