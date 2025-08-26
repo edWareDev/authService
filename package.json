@@ -10,7 +10,7 @@
   "scripts": {
     "start": "node --env-file=.env .",
     "dev": "node --env-file=.env.development --watch .",
-    "test": "node test --env-file=.env.test  --experimental-vm-modules node_modules/jest/bin/jest.js --verbose --silent",
+    "test": "vitest",
     "build": "javascript-obfuscator src --output dist/src --compact true --control-flow-flattening true --control-flow-flattening-threshold 0.75 --dead-code-injection true --dead-code-injection-threshold 0.4 --debug-protection true --rename-globals true --string-array true"
   },
   "keywords": [],

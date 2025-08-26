@@ -17,7 +17,7 @@ export const createUser = async (data) => {
             userDni: dni,
             userEmail: email,
             userPassword: await hashPassword(password),
-            userToken: generatePassword(USER_CONFIG.TOKEN_LENGTH),
+            userToken: generatePassword(USER_CONFIG.TOKEN_LENGTH, { allowSymbols: false }),
             userRole: role,
             userIsActive: isActive,
         });

@@ -18,7 +18,7 @@ export const deleteUser = async (id, idUser) => {
         const userDeletedNewData = new User({
             userName: `userDeleted${idSanitized}`,
             userEmail: `emailDeleted${idSanitized}`,
-            userPassword: await hashPassword(generatePassword(USER_CONFIG.TOKEN_LENGTH)),
+            userPassword: await hashPassword(generatePassword(USER_CONFIG.TOKEN_LENGTH, { allowSymbols: false })),
             userRole: userFound.userRole,
             userIsActive: false,
             deletedAt: Date.now(),

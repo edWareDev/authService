@@ -13,7 +13,7 @@ export const createSystem = async (data) => {
         const { name, isActive } = createSystemSchema.parse(data);
         const tempSystem = new System({
             systemName: name,
-            systemSecret: generatePassword(SYSTEM_CONFIG.SECRET_LENGTH),
+            systemSecret: generatePassword(SYSTEM_CONFIG.SECRET_LENGTH, { allowSymbols: false }),
             systemIsActive: isActive,
         });
 
