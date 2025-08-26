@@ -1,5 +1,6 @@
-import { CustomError } from "../utils/CustomError.js";
-import { fetchResponse } from "../utils/fetchResponse.js";
+import { CustomError } from "../../../utils/CustomError.js";
+import { fetchResponse } from "../../../utils/fetchResponse.js";
+import { HTTP_CODES } from "../../../utils/http_error_codes.js";
 
 export const validatePermissions = (allowedUserRoles) => {
 
@@ -9,9 +10,9 @@ export const validatePermissions = (allowedUserRoles) => {
         const { user } = req;
 
         try {
-            if (!user) throw new CustomError('Error al obtener los datos.', 403, ["No tienes permiso para acceder a esta ruta."]);
+            if (!user) throw new CustomError('Error al obtener los datos.', HTTP_CODES._403_FORBIDDEN, ["No tienes permiso para acceder a esta ruta."]);
 
-            if (!userRoles.includes(user.userRole)) throw new CustomError('Error al obtener los datos.', 403, ["Este usuario no tiene permiso para acceder a esta ruta."]);
+            if (!userRoles.includes(user.userRole)) throw new CustomError('Error al obtener los datos.', HTTP_CODES._403_FORBIDDEN, ["Este usuario no tiene permiso para acceder a esta ruta."]);
 
             next();
         } catch (error) {

@@ -1,0 +1,15 @@
+{
+    "CODE_LENGTH": 6,
+    "PASSWORD_RECOVERY": {
+        "LENGTH": 6,
+        "DURATION": 15
+    },
+    "EMAIL_VERIFICATION": {
+        "LENGTH": 6,
+        "DURATION": 30
+    },
+    "LOGIN": {
+        "LENGTH": 4,
+        "DURATION": 5
+    }
+}

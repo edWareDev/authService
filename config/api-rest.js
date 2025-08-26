@@ -16,7 +16,7 @@ export const startServer = (app) => {
             });
             console.log(MESSAGE);
             resolve(server);
-            return
+            return;
         });
 
         server.on('error', async (error) => {
@@ -45,7 +45,7 @@ export const startServer = (app) => {
 
             console.error(errorMessage);
             reject(error);
-            return
+            return;
         });
     });
 };

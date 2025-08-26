@@ -6,4 +6,4 @@ export const isPrivateIP = (ip) => {
         /^45\.5\.56\./                     // 45.5.56.0 - 45.5.56.255
     ];
     return privateRanges.some((range) => range.test(ip));
-}
+};

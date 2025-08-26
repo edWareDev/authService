@@ -1,11 +1,11 @@
-import { model } from "mongoose"
-import { UserSystemLinkSchema } from "../../adapters/databases/UserSystemLinkModel.js"
+import { model } from "mongoose";
+import { UserSystemLinkSchema } from "../../adapters/databases/UserSystemLinkModel.js";
 
 class UserSystemLinksRepository {
-    #userSystemLinksDb
+    #userSystemLinksDb;
 
-    constructor(model) {
-        this.#userSystemLinksDb = model
+    constructor() {
+        this.#userSystemLinksDb = model("UserSystemLinks", UserSystemLinkSchema);
     }
 
     async getUserSystemLinkById(id) {
@@ -13,11 +13,11 @@ class UserSystemLinksRepository {
             const userSystemLinkFound = await this.#userSystemLinksDb
                 .findById(id)
                 .populate(["userId", "systemId"])
-                .lean()
-            return userSystemLinkFound ? userSystemLinkFound : { error: 'No existen el vinculo' }
+                .lean();
+            return userSystemLinkFound ? userSystemLinkFound : { error: 'No existen el vinculo' };
         } catch (error) {
-            console.error(error.message)
-            return ({ error: "No fue posible obtener el vinculo por id" })
+            console.error(error.message);
+            return ({ error: "No fue posible obtener el vinculo por id" });
         }
     }
 
@@ -26,11 +26,11 @@ class UserSystemLinksRepository {
             const userSystemLinkFound = await this.#userSystemLinksDb
                 .findOne({ userId, systemId })
                 .populate(populate ? ["userId", "systemId"] : [])
-                .lean()
-            return userSystemLinkFound ? userSystemLinkFound : { error: 'El usuario no tiene acceso al sistema' }
+                .lean();
+            return userSystemLinkFound ? userSystemLinkFound : { error: 'El usuario no tiene acceso al sistema' };
         } catch (error) {
-            console.error(error.message)
-            return ({ error: "No fue posible obtener el vinculo por id de usuario e id de sistema" })
+            console.error(error.message);
+            return ({ error: "No fue posible obtener el vinculo por id de usuario e id de sistema" });
         }
     }
 
@@ -44,7 +44,7 @@ class UserSystemLinksRepository {
                 .populate(populate ? ["systemId"] : [])
                 .lean();
 
-            const systemsInPage = systems.length
+            const systemsInPage = systems.length;
             const totalSystems = await this.#userSystemLinksDb.countDocuments({ userId });
             const totalPages = Math.ceil(totalSystems / limit);
 
@@ -57,8 +57,8 @@ class UserSystemLinksRepository {
 
             return { systems, pagination };
         } catch (error) {
-            console.error(error.message)
-            return ({ error: "No fue posible obtener los vinculos por id de usuario" })
+            console.error(error.message);
+            return ({ error: "No fue posible obtener los vinculos por id de usuario" });
         }
     }
 
@@ -72,7 +72,7 @@ class UserSystemLinksRepository {
                 .populate(populate ? ["userId"] : [])
                 .lean();
 
-            const usersInPage = users.length
+            const usersInPage = users.length;
             const totalUsers = await this.#userSystemLinksDb.countDocuments({ systemId });
             const totalPages = Math.ceil(totalUsers / limit);
 
@@ -85,31 +85,30 @@ class UserSystemLinksRepository {
 
             return { users, pagination };
         } catch (error) {
-            console.error(error.message)
-            return ({ error: "No fue posible obtener los vinculos por id de sistema" })
+            console.error(error.message);
+            return ({ error: "No fue posible obtener los vinculos por id de sistema" });
         }
     }
 
     async createUserSystemLink(userSystemLink) {
         try {
-            const newUserSystemLink = await this.#userSystemLinksDb.create(userSystemLink)
-            return newUserSystemLink
+            const newUserSystemLink = await this.#userSystemLinksDb.create(userSystemLink);
+            return newUserSystemLink;
         } catch (error) {
-            console.error(error.message)
-            return ({ error: "No fue posible crear el vinculo" })
+            console.error(error.message);
+            return ({ error: "No fue posible crear el vinculo" });
         }
     }
 
     async updateUserSystemLink(id, userSystemLink) {
         try {
-            const updatedUserSystemLink = await this.#userSystemLinksDb.findByIdAndUpdate(id, userSystemLink, { new: true, runValidators: true })
-            return updatedUserSystemLink
+            const updatedUserSystemLink = await this.#userSystemLinksDb.findByIdAndUpdate(id, userSystemLink, { new: true, runValidators: true });
+            return updatedUserSystemLink;
         } catch (error) {
-            console.error(error.message)
-            return ({ error: "No fue posible actualizar el vinculo" })
+            console.error(error.message);
+            return ({ error: "No fue posible actualizar el vinculo" });
         }
     }
 }
 
-const systemModelInstance = model('userSystemLinks', UserSystemLinkSchema);
-export const userSystemLinksRepository = new UserSystemLinksRepository(systemModelInstance);
+export const userSystemLinksRepository = new UserSystemLinksRepository();

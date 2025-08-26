@@ -2,18 +2,18 @@ import { Router } from "express";
 import { controllerLogin, controllerLogout, controllerRefreshAccessToken } from "../web/controllers/AuthController.js";
 
 
-export const authRouter = Router()
+export const authRouter = Router();
 
 // RUTAS POST 
 // LOGIN
-authRouter.post('/login', controllerLogin)
+authRouter.post('/login', controllerLogin);
 
 // REFRESH TOKEN
-authRouter.post('/validateAccessToken', controllerRefreshAccessToken)
+authRouter.post('/validateAccessToken', controllerRefreshAccessToken);
 
 // REFRESH TOKEN
-authRouter.post('/refreshAccessToken', controllerRefreshAccessToken)
+authRouter.post('/refreshAccessToken', controllerRefreshAccessToken);
 
 // RUTAS DELETE
 // LOGOUT
-authRouter.delete('/logout', controllerLogout)
+authRouter.delete('/logout', controllerLogout);

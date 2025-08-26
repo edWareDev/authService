@@ -7,11 +7,12 @@ import { getUserById } from "../../usecases/users/GetUserById.js";
 import { deleteUser } from "../../usecases/users/DeleteUser.js";
 import { getSystemById } from "../../usecases/systems/GetSystemById.js";
 import { getUserSystemLinksBySystemId } from "../../usecases/users/GetUsersBySystemId.js";
+import { HTTP_CODES } from "../../utils/http_error_codes.js";
 
 export async function controllerGetUsers(req, res) {
     try {
-        const allUsers = await getUsers(req.query)
-        if (allUsers.error) throw new CustomError('Error al obtener los usuarios.', 404, allUsers.error);
+        const allUsers = await getUsers(req.query);
+        if (allUsers.error) throw new CustomError('Error al obtener los usuarios.', HTTP_CODES._404_NOT_FOUND, allUsers.error);
         fetchResponse(res, { statusCode: 200, message: 'Datos obtenidos correctamente.', data: allUsers });
     } catch (error) {
         if (error instanceof CustomError) {
@@ -26,7 +27,7 @@ export async function controllerGetUsers(req, res) {
 export async function controllerGetUserById(req, res) {
     try {
         const userFound = await getUserById(req.params.Id);
-        if (userFound.error) throw new CustomError('Hubo un error al encontrar el usuario.', 404, userFound.error);
+        if (userFound.error) throw new CustomError('Hubo un error al encontrar el usuario.', HTTP_CODES._404_NOT_FOUND, userFound.error);
         fetchResponse(res, { statusCode: 200, message: 'Usuario encontrado correctamente.', errorCode: null, data: userFound });
     } catch (error) {
         if (error instanceof CustomError) {
@@ -41,11 +42,11 @@ export async function controllerGetUserById(req, res) {
 export async function controllerGetUsersBySystemId(req, res) {
     try {
         const systemFound = await getSystemById(req.params.Id);
-        if (systemFound.error) throw new CustomError('Hubo un error al encontrar el usuario.', 404, systemFound.error);
+        if (systemFound.error) throw new CustomError('Hubo un error al encontrar el usuario.', HTTP_CODES._404_NOT_FOUND, systemFound.error);
 
         const populate = (String(req.query?.populate).trim() === 'true' ? true : false);
-        const usersFound = await getUserSystemLinksBySystemId(req.query, systemFound._id, populate)
-        if (usersFound.error) throw new CustomError('Error al obtener los usuarios.', 404, usersFound.error);
+        const usersFound = await getUserSystemLinksBySystemId(req.query, systemFound._id, populate);
+        if (usersFound.error) throw new CustomError('Error al obtener los usuarios.', HTTP_CODES._404_NOT_FOUND, usersFound.error);
 
         fetchResponse(res, { statusCode: 200, message: 'Usuarios encontrados correctamente.', errorCode: null, data: usersFound });
     } catch (error) {
@@ -60,8 +61,8 @@ export async function controllerGetUsersBySystemId(req, res) {
 
 export async function controllerCreateUser(req, res) {
     try {
-        const newUser = await createUser(req.body)
-        if (newUser.error) throw new CustomError('Error al crear el usuario', 400, newUser.error);
+        const newUser = await createUser(req.body);
+        if (newUser.error) throw new CustomError('Error al crear el usuario', HTTP_CODES._400_BAD_REQUEST, newUser.error);
         fetchResponse(res, { statusCode: 201, message: 'Usuario creado correctamente.', errorCode: null, data: newUser });
     } catch (error) {
         if (error instanceof CustomError) {
@@ -80,7 +81,7 @@ export async function controllerCreateUser(req, res) {
 export async function controllerUpdateUser(req, res) {
     try {
         const userUpdated = await updateUser(req.body, req.params.Id);
-        if (userUpdated.error) throw new CustomError('Error al actualizar el usuario.', 400, userUpdated.error);
+        if (userUpdated.error) throw new CustomError('Error al actualizar el usuario.', HTTP_CODES._400_BAD_REQUEST, userUpdated.error);
         fetchResponse(res, { statusCode: 201, message: 'Usuario actualizado correctamente.', errorCode: null, data: userUpdated });
     } catch (error) {
         if (error instanceof CustomError) {
@@ -99,7 +100,7 @@ export async function controllerUpdateUser(req, res) {
 export async function controllerDeleteUser(req, res) {
     try {
         const userVirtualDeleted = await deleteUser(req.params.Id, req.user?._id || req.externalApp?._id);
-        if (userVirtualDeleted.error) throw new CustomError('Hubo un error al eliminar el usuario.', 400, userVirtualDeleted.error);
+        if (userVirtualDeleted.error) throw new CustomError('Hubo un error al eliminar el usuario.', HTTP_CODES._400_BAD_REQUEST, userVirtualDeleted.error);
         fetchResponse(res, { statusCode: 200, message: 'Usuario eliminado correctamente.', errorCode: null });
     } catch (error) {
         if (error instanceof CustomError) {

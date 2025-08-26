@@ -21,23 +21,23 @@ export const UpdateUserSystemLinkStatus = async (id, status) => {
         if (!isValidStatus(status)) throw new Error("El estado ingresado no es válido.");
         const statusBoolean = typeof status === "boolean" ? status : (status.toLowerCase() === 'true');
 
-        const linkFound = await getUserSystemLinkById(idSanitized)
+        const linkFound = await getUserSystemLinkById(idSanitized);
         if (!linkFound) throw new Error('El vínculo no existe.');
         if (linkFound.error) throw new Error(linkFound.error);
         if (linkFound.deletedAt) throw new Error("El vínculo fue eliminado.");
 
-        const { user, system, isActive } = updateUserSystemLinkSchema.parse({ user: idSanitized, system: idSanitized, isActive: statusBoolean })
+        const { user, system, isActive } = updateUserSystemLinkSchema.parse({ user: idSanitized, system: idSanitized, isActive: statusBoolean });
 
         const userSystemLinkNewData = new UserSystemLink({
             userId: user,
             systemId: system,
             userSystemLinkIsActive: isActive
-        })
+        });
 
         const linkUpdated = await userSystemLinksRepository.updateUserSystemLink(idSanitized, userSystemLinkNewData);
 
         return linkUpdated;
-    } catch (error) {
-        return { error: error.message };
+    } catch (e) {
+        return { error: e.message };
     }
-}
+};

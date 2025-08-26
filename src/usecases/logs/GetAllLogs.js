@@ -4,7 +4,7 @@ export const getAllLogs = async () => {
     try {
         const allLogs = await logsRepository.getAllLogs();
         return allLogs;
-    } catch (error) {
-        return { error: error.message };
+    } catch (e) {
+        return { error: e.message };
     }
-}
+};

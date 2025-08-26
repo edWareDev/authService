@@ -1,7 +1,7 @@
 import { RequestLog } from "../../adapters/databases/RequestLogModel.js";
 
 class RequestLogRepository {
-    #requestLogsDb
+    #requestLogsDb;
 
     constructor() {
         this.#requestLogsDb = RequestLog;

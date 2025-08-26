@@ -1,43 +1,42 @@
-import { model } from "mongoose"
-import { RefreshTokenSchema } from "../../adapters/databases/RefreshTokenModel.js"
+import { model } from "mongoose";
+import { RefreshTokenSchema } from "../../adapters/databases/RefreshTokenModel.js";
 
 class RefreshTokensRepository {
-    #refreshTokensDb
+    #refreshTokensDb;
 
-    constructor(model) {
-        this.#refreshTokensDb = model
+    constructor() {
+        this.#refreshTokensDb = model("RefreshTokens", RefreshTokenSchema);
     }
 
     async getRefreshTokenByValue(tokenValue) {
         try {
-            const refreshTokenFound = await this.#refreshTokensDb.findOne({ tokenValue: tokenValue }).lean()
-            return refreshTokenFound ? refreshTokenFound : { error: 'No existe el refresh token con ese value.' }
+            const refreshTokenFound = await this.#refreshTokensDb.findOne({ tokenValue: tokenValue }).lean();
+            return refreshTokenFound ? refreshTokenFound : { error: 'No existe el refresh token con ese value.' };
         } catch (error) {
-            console.error(error.message)
-            return ({ error: "No fue posible obtener el refresh token." })
+            console.error(error.message);
+            return ({ error: "No fue posible obtener el refresh token." });
         }
     }
 
     async createRefreshToken(data) {
         try {
-            const newRefreshToken = await this.#refreshTokensDb.create(data)
-            return newRefreshToken
+            const newRefreshToken = await this.#refreshTokensDb.create(data);
+            return newRefreshToken;
         } catch (error) {
-            console.error(error.message)
-            return { error: "No fue posible crear el refresh token." }
+            console.error(error.message);
+            return { error: "No fue posible crear el refresh token." };
         }
     }
 
     async updateRefreshToken(id, refreshTokanData) {
         try {
-            const updatedRefreshToken = await this.#refreshTokensDb.findByIdAndUpdate(id, refreshTokanData, { new: true, runValidators: true })
-            return updatedRefreshToken
+            const updatedRefreshToken = await this.#refreshTokensDb.findByIdAndUpdate(id, refreshTokanData, { new: true, runValidators: true });
+            return updatedRefreshToken;
         } catch (error) {
-            console.error(error.message)
-            return { error: "No fue posible actualizar el refresh token." }
+            console.error(error.message);
+            return { error: "No fue posible actualizar el refresh token." };
         }
     }
 }
 
-const refreshTokenModelInstance = model('refreshTokens', RefreshTokenSchema);
-export const refreshTokensRepository = new RefreshTokensRepository(refreshTokenModelInstance);
+export const refreshTokensRepository = new RefreshTokensRepository();

@@ -16,6 +16,13 @@ const BodySchema = z.union([
     z.null()
 ]);
 
+const REQUEST_LOG_CONFIG = {
+    ID_LENGTH_MIN: 1,
+    ID_LENGTH_MAX: 100,
+    USER_ID_LENGTH_MIN: 1,
+    USER_ID_LENGTH_MAX: 50,
+};
+
 export const createRequestLogSchema = z.object({
     requestId: z
         .string({
@@ -23,15 +30,15 @@ export const createRequestLogSchema = z.object({
             invalid_type_error: "El requestId debe ser una cadena de texto"
         })
         .trim()
-        .min(1, "El requestId no puede estar vacío")
-        .max(100, "El requestId es demasiado largo"),
+        .min(REQUEST_LOG_CONFIG.ID_LENGTH_MIN, "El requestId no puede estar vacío")
+        .max(REQUEST_LOG_CONFIG.ID_LENGTH_MAX, "El requestId es demasiado largo"),
     userId: z
         .string()
         .trim()
-        .min(1, "El token no puede estar vacío")
-        .max(50, "El token es demasiado largo")
+        .min(REQUEST_LOG_CONFIG.USER_ID_LENGTH_MIN, "El token no puede estar vacío")
+        .max(REQUEST_LOG_CONFIG.USER_ID_LENGTH_MAX, "El token es demasiado largo")
         .nullable()
-        .optional(), // Permite `null` o que no esté presente
+        .optional(),
     endpoint: z
         .string()
         .trim()
@@ -44,6 +51,14 @@ export const createRequestLogSchema = z.object({
     ip: z.string().trim().optional(),
 });
 
+const RESPONSE_LOG_CONFIG = {
+    STATUS_CODE_MIN: 100,
+    STATUS_CODE_MAX: 599,
+    ERROR_CODE_MIN: 1,
+    ERROR_CODE_MAX: 300,
+    MESSAGE_LENGTH_MAX: 500
+};
+
 export const createResponseLogSchema = z.object({
     requestId: z
         .string({
@@ -51,8 +66,8 @@ export const createResponseLogSchema = z.object({
             invalid_type_error: "El requestId debe ser una cadena de texto"
         })
         .trim()
-        .min(1, "El requestId no puede estar vacío")
-        .max(100, "El requestId es demasiado largo"),
+        .min(REQUEST_LOG_CONFIG.ID_LENGTH_MIN, "El requestId no puede estar vacío")
+        .max(REQUEST_LOG_CONFIG.ID_LENGTH_MAX, "El requestId es demasiado largo"),
     responseTime: z.union([
         z.number().min(0, "El responseTime no puede ser negativo"),
         z.null()
@@ -63,41 +78,47 @@ export const createResponseLogSchema = z.object({
     statusCode: z
         .number()
         .int("El statusCode debe ser un número entero")
-        .min(100, "El statusCode debe ser un código HTTP válido (100-599)")
-        .max(599, "El statusCode debe ser un código HTTP válido (100-599)")
+        .min(RESPONSE_LOG_CONFIG.STATUS_CODE_MIN, `El statusCode debe ser un código HTTP válido (${RESPONSE_LOG_CONFIG.STATUS_CODE_MIN}-${RESPONSE_LOG_CONFIG.STATUS_CODE_MAX})`)
+        .max(RESPONSE_LOG_CONFIG.STATUS_CODE_MAX, `El statusCode debe ser un código HTTP válido (${RESPONSE_LOG_CONFIG.STATUS_CODE_MIN}-${RESPONSE_LOG_CONFIG.STATUS_CODE_MAX})`)
         .nullable()
         .optional(),
     errorCode: z
         .array(
             z.string()
                 .trim()
-                .min(1, "Cada código de error debe tener al menos 1 carácter")
-                .max(300, "Cada código de error es demasiado largo")
+                .min(RESPONSE_LOG_CONFIG.ERROR_CODE_MIN, "Cada código de error debe tener al menos 1 carácter")
+                .max(RESPONSE_LOG_CONFIG.ERROR_CODE_MAX, "Cada código de error es demasiado largo")
         )
         .nullable()
         .optional(),
     message: z
         .string()
         .trim()
-        .max(500, "El message es demasiado largo")
+        .max(RESPONSE_LOG_CONFIG.MESSAGE_LENGTH_MAX, "El message es demasiado largo")
         .nullable()
         .optional(),
 });
+
+const SYSTEM_LOG_CONFIG = {
+    ERROR_CODE_MIN: 1,
+    MESSAGE_LENGTH_MIN: 1,
+    MESSAGE_LENGTH_MAX: 500,
+};
 
 export const createSystemLogSchema = z.object({
     errorCode: z
         .array(
             z.string()
                 .trim()
-                .min(1, "Cada código de error debe tener al menos 1 carácter")
+                .min(SYSTEM_LOG_CONFIG.ERROR_CODE_MIN, "Cada código de error debe tener al menos 1 carácter")
         )
         .optional()
         .nullable(),
     message: z
         .string()
         .trim()
-        .max(500, "El mensaje es demasiado largo")
-        .min(1, "El mensaje no puede estar vacío"), // Debe ser requerido
+        .min(SYSTEM_LOG_CONFIG.MESSAGE_LENGTH_MIN, "El mensaje no puede estar vacío")
+        .max(SYSTEM_LOG_CONFIG.MESSAGE_LENGTH_MAX, "El mensaje es demasiado largo"),
     severityLevel: z
         .enum(["info", "warning", "error", "critical", "fatal"]),
 });

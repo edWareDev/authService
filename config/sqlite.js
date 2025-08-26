@@ -28,15 +28,15 @@ export async function connectSQLite() {
             errorCode: null,
             message: MESSAGE,
             severityLevel: "info"
-        })
+        });
     } catch (error) {
-        const MESSAGE = 'Error al conectar con la base de datos de registros'
+        const MESSAGE = 'Error al conectar con la base de datos de registros';
         systemInfo.setDbStatus(false);
         await createSystemLog({
             errorCode: null,
             message: MESSAGE,
             severityLevel: "info"
-        })
+        });
         console.error(MESSAGE, error);
         systemInfo.setLogDbStatus(false);
     }

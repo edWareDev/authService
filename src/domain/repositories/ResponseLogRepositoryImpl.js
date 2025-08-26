@@ -1,7 +1,7 @@
 import { ResponseLog } from "../../adapters/databases/ResponseLogModel.js";
 
 class ResponseLogRepository {
-    #responseLogsDb
+    #responseLogsDb;
 
     constructor() {
         this.#responseLogsDb = ResponseLog;
