@@ -22,6 +22,7 @@ import { authRouter } from "./adapters/routers/authRouter.js";
 import { corsMiddleware } from "./adapters/web/middlewares/corsMiddleware.js";
 import { HTTP_CODES } from "./utils/http_error_codes.js";
 import { validationMiddleware } from "./adapters/web/middlewares/validationMiddleware.js";
+import { firstRunSetup } from "../config/firstRunSetup.js";
 
 export const app = express();
 const loggingMiddleware = createLoggingMiddleware();
@@ -52,6 +53,8 @@ await connectSQLite();
 // connect to mongodb
 await connectMongoDB();
 
+// firstRun&Setup
+await firstRunSetup();
 
 // start the server
 await startServer(app);
