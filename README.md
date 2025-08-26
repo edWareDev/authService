@@ -1,6 +1,7 @@
 # 📡Guía de Instalación y Despliegue
 
 ## 🧩 Descripción General
+
 Este servicio fue desarrollado para encargarse de la autenticación de los sistemas desarrollados por la empresa. De esta manera tenemos un endpoint de autenticación.
 
 Este proyecto no incluye aún una interfaz Front-End, pero su arquitectura permite que pueda ser consumido por clientes externos a través de endpoints REST seguros y estructurados.
@@ -40,22 +41,32 @@ Este proyecto no incluye aún una interfaz Front-End, pero su arquitectura permi
 git clone -b main https://github.com/Sattelital/authService
 cd authService
 ```
+
 ### Instalacion de dependencias
+
 En la carpeta raiz del sistema ejecutar el siguiente comando:
+
 ```bash
 npm install
 ```
+
 ### Configuración del archivo ENV
+
 Crear un archivo `.env` en la raíz del proyecto con el siguiente contenido:
+
 ```env
 # CONFIGURACIONES DE DESPLIEGUE
 NODE_ENV=development # Opciones: development, production
 
 # CONFIGURACIONES DE SEGURIDAD
-JWT_SECRET_KEY=key # Clave de encriptacion de tokens de acceso
-JWT_REFRESH_SECRET_KEY=otherKey # Clave de encriptación de tokens de refresco
+# JWT
+JWT_ACCESS_KEY=key # Clave de encriptacion de tokens de acceso
+JWT_REFRESH_KEY=otherKey # Clave de encriptación de tokens de refresco
 JWT_ALGORITHM=HS256 # Algoritmo de autenticación. Opciones: HS256, HS512
-DATA_ENCRYPTION_KEY=encriptionKey # Clave de encriptación de información importante/privada
+
+# CRYPTO
+ENCRYPTION_SECRET=ncriptionKey # Clave de encriptación de información importante/privada
+ENCRYPTION_ALGORITHM="aes-256-cbc" # Algoritmo de encriptación.
 
 # CONFIGURACIÓN DE LA API
 API_PORT=3333 # Puerto por donde se expondrá la API
@@ -64,7 +75,7 @@ API_PORT=3333 # Puerto por donde se expondrá la API
 MONGODB_CNX_STR=mongodb+srv://urlBaseDeDatos/eStreamPanel # URL de conexión con la base de datos MongoDB
 
 #CONFIGURACIÓN DE LA BASE DE DATOS SQLITE
-SQLITE_CNX_STR = archivo_SQLite # Ruta al archivo que se creará y servirá como base de datos par alos registros 
+SQLITE_CNX_STR = archivo_SQLite # Ruta al archivo que se creará y servirá como base de datos par alos registros
 
 # CONFIGURACIONES DE LOGGING
 SAVE_LOGS=1 # Activar el registro de Logs
@@ -73,9 +84,10 @@ SAVE_LOGS=1 # Activar el registro de Logs
 ## 🚀 Despliegue en Producción
 
 ### Recomendaciones de entorno
-* Usar servidores separados para la base de datos y backend según los recursos recomendados.
-* Mantener actualizado Node.js y dependencias del proyecto.
-* Establecer entorno de producción en .env (NODE_ENV=production).
+
+- Usar servidores separados para la base de datos y backend según los recursos recomendados.
+- Mantener actualizado Node.js y dependencias del proyecto.
+- Establecer entorno de producción en .env (NODE_ENV=production).
 
 ### 1. Instalar PM2
 
@@ -83,8 +95,8 @@ SAVE_LOGS=1 # Activar el registro de Logs
 npm install -g pm2
 ```
 
-
 ### 2. Iniciar el servicio
+
 Inicia la aplicación con PM2 usando:
 
 ```
@@ -105,16 +117,21 @@ pm2 list
 > ```
 
 #### Reinicio y Suprevisión
+
 Para reiniciar la aplicación después de cambios en configuración o código:
+
 ```
 pm2 restart authService-API
 ```
+
 Para visualizar logs en tiempo real:
+
 ```
 pm2 logs authService-API
 ```
 
 ### 4. Configuración opcional de dominio y SSL
+
 Actualmente no es necesario, pero puede agregarse configurando un proxy inverso con Nginx y certificados SSL (Let's Encrypt).
 
 ---
@@ -137,7 +154,9 @@ Actualmente no es necesario, pero puede agregarse configurando un proxy inverso 
 ---
 
 ## 🧪 Pruebas y Validación
+
 Puedes verificar el estado de los servicios en:
+
 ```
 [host]/health
 ```
@@ -154,34 +173,39 @@ La documentación completa de la API REST está disponible vía Swagger en:
 
 Desde allí se puede:
 
-* Visualizar todos los endpoints disponibles.
-* Probar las solicitudes directamente.
-* Consultar ejemplos de respuestas.
+- Visualizar todos los endpoints disponibles.
+- Probar las solicitudes directamente.
+- Consultar ejemplos de respuestas.
 
 ---
 
 ## 📝 Mantenimiento y Logs
+
 ### Almacenamiento y consulta de logs
-* Los logs se almacenan en la base de datos SQLite.
-* Se pueden consultar a través de los endpoints disponibles.
+
+- Los logs se almacenan en la base de datos SQLite.
+- Se pueden consultar a través de los endpoints disponibles.
 
 ### Comandos útiles con PM2
+
 Muestra estado de procesos.
+
 ```
 pm2 status
 ```
 
-
 ### Consideraciones al hacer cambios de configuración
-* Siempre reiniciar la aplicación para aplicar cambios.
-* Verificar logs para detectar posibles errores.
+
+- Siempre reiniciar la aplicación para aplicar cambios.
+- Verificar logs para detectar posibles errores.
 
 ### Recomendaciones
-* Realizar backups regulares de la base de datos.
-* Supervisión continua con PM2.
 
+- Realizar backups regulares de la base de datos.
+- Supervisión continua con PM2.
 
 ## 📌 Contacto Técnico
+
 Responsable del mantenimiento:
 
 Edward Espinoza Tito | edward.espinoza@globalfiber.com.pe
