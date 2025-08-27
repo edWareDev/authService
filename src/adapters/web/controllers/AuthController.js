@@ -37,7 +37,7 @@ export async function controllerValidateAccessToken(req, res) {
         if (!accessToken || accessToken === '') throw new CustomError('Hubo un error al validar el token', HTTP_CODES._400_BAD_REQUEST, "El access token es invñalido o no fue enviado.");
 
         const tokenData = verifyAccessToken(accessToken);
-        if (!tokenData || tokenData.error) throw new CustomError('Hubo un error al refrescar el token', HTTP_CODES._400_BAD_REQUEST, [tokenData?.error || "El refresh token es inválido"]);
+        if (!tokenData || tokenData.error) throw new CustomError('Hubo un error al validar el token', HTTP_CODES._400_BAD_REQUEST, [tokenData?.error || "El refresh token es inválido"]);
 
         fetchResponse(res, { statusCode: 200, message: 'Sesión iniciada correctamente.', data: { tokenData } });
     } catch (error) {

@@ -3,7 +3,7 @@ import { isValidObjectId } from "mongoose";
 import { getSystemById } from "./GetSystemById.js";
 import { System } from "../../domain/entities/System.js";
 import { systemsRepository } from "../../domain/repositories/SystemRepositoryImpl.js";
-import { SYSTEM_CONFIG } from "./CreateSystem.js";
+import { SystemConfig } from "../systems/config.js";
 
 export const deleteSystem = async (id, idUser) => {
     try {
@@ -16,7 +16,7 @@ export const deleteSystem = async (id, idUser) => {
 
         const systemDeletedNewData = new System({
             systemName: `userDeleted${idSanitized}`,
-            systemSecret: generatePassword(SYSTEM_CONFIG.SECRET_LENGTH, { allowSymbols: false }),
+            systemSecret: generatePassword(SystemConfig.SECRET_LENGTH, { allowSymbols: false }),
             systemIsActive: false,
             deletedAt: Date.now(),
             deletedBy: String(idUser)
