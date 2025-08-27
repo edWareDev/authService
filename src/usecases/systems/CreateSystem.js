@@ -3,17 +3,15 @@ import { generatePassword } from "../../utils/passwordGenerator.js";
 import { createSystemSchema } from "../../adapters/web/validators/systemValidators.js";
 import { System } from "../../domain/entities/System.js";
 import { systemsRepository } from "../../domain/repositories/SystemRepositoryImpl.js";
-
-export const SYSTEM_CONFIG = {
-    SECRET_LENGTH: 20,
-};
+import { SystemConfig } from "./config.js";
 
 export const createSystem = async (data) => {
     try {
         const { name, isActive } = createSystemSchema.parse(data);
         const tempSystem = new System({
             systemName: name,
-            systemSecret: generatePassword(SYSTEM_CONFIG.SECRET_LENGTH, { allowSymbols: false }),
+            systemSecret: generatePassword(SystemConfig.SECRET_LENGTH, { allowSymbols: false }),
+            systemToken: generatePassword(SystemConfig.TOKEN_LEGTH, { allowSymbols: true }),
             systemIsActive: isActive,
         });
 

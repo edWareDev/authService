@@ -55,6 +55,16 @@ class SystemsRepository {
         }
     }
 
+    async getSystemByToken(token) {
+        try {
+            const systemFound = await this.#systemsDb.findOne({ systemToken: token }).lean();
+            return systemFound ? systemFound : { error: 'No existe el sistema con ese token.' };
+        } catch (error) {
+            console.error(error.message);
+            return ({ error: "No fue posible obtener el sistema por secret." });
+        }
+    }
+
     async createSystem(system) {
         try {
             const newSystem = await this.#systemsDb.create(system);

@@ -18,6 +18,7 @@ export const updateSystem = async (data, id) => {
         const systemNewData = new System({
             systemName: (typeof name !== 'undefined') ? String(name).trim() : systemFound.systemName,
             systemSecret: systemFound.systemSecret,
+            systemToken: systemFound.systemToken,
             systemIsActive: (typeof isActive !== 'undefined') ? isActive : systemFound.systemIsActive,
         });
 

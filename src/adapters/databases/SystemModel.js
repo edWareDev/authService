@@ -13,6 +13,11 @@ export const SystemSchema = new Schema({
         required: true,
         index: true
     },
+    systemToken: {
+        type: String,
+        required: true,
+        index: true
+    },
     systemIsActive: {
         type: Boolean,
         required: true,

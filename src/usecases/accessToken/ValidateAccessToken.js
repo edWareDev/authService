@@ -1,4 +1,3 @@
-import { ZodError } from "zod";
 import { verifyAccessToken } from "../../infraestructure/security/jwtService.js";
 import { HTTP_CODES } from "../../utils/http_error_codes.js";
 
@@ -16,9 +15,6 @@ export const validateAccessToken = (req) => {
 
         return accessTokenData;
     } catch (error) {
-        if (error instanceof ZodError) {
-            return { error: error.errors.map(e => e.message) };
-        }
         return { error: error.message || "Unexpected error" };
     }
 };

@@ -46,7 +46,7 @@ export const firstRunSetup = async () => {
             secret: createdAuthService.systemSecret,
         });
 
-        console.log("‼️ Por seguridad utiliza estas credenciales para crear otra cuenta de administración, luego elimina esta cuenta.‼️");
+        console.log("‼️ Por seguridad utiliza estas credenciales para crear otra cuenta de administración, no olvides vincularlo con el sistema de autenticación para que pueda iniciar sesión, luego elimina esta cuenta.‼️");
     } else if (users.length === 1) {
 
         const initialUser = await getUserByEmail("administrador@authservice.com");
@@ -65,7 +65,7 @@ export const firstRunSetup = async () => {
                 password: initialUserData.password,
                 secret: authService.systemSecret
             });
-            console.log("‼️ Por seguridad utiliza estas credenciales para crear otra cuenta de administración, luego elimina esta cuenta.‼️");
+            console.log("‼️ Por seguridad utiliza estas credenciales para crear otra cuenta de administración, no olvides vincularlo con el sistema de autenticación para que pueda iniciar sesión, luego elimina esta cuenta.‼️");
         }
     }
 };
