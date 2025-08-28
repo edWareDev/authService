@@ -206,7 +206,6 @@ export const createLoggingMiddleware = () => {
                     errorCode: sanitizedBody.errorCode || null,
                     message: sanitizedBody.message
                 });
-
                 return originalSend.apply(res, arguments);
             };
 
