@@ -20,11 +20,11 @@ import { connectSQLite } from "../config/sqlite.js";
 
 import { authRouter } from "./adapters/routers/authRouter.js";
 import { corsMiddleware } from "./adapters/web/middlewares/corsMiddleware.js";
-import { HTTP_CODES } from "./utils/http_error_codes.js";
 import { validationMiddleware } from "./adapters/web/middlewares/validationMiddleware.js";
 import { systemValidationMiddleware } from "./adapters/web/middlewares/systemValidationMiddleware.js";
 import { firstRunSetup } from "../config/firstRunSetup.js";
 import { apiInternalRouter } from "./adapters/routers/apiInternalRouter.js";
+import { errorRouter } from "./adapters/routers/errorRouter.js";
 
 export const app = express();
 const loggingMiddleware = createLoggingMiddleware();
@@ -49,7 +49,7 @@ app.use('/auth', authRouter);
 
 app.use('/health', healthRouter);
 
-app.use('/{*splat}', (_, res) => res.status(HTTP_CODES._404_NOT_FOUND).json({ error: "Endpoint not found" }));
+app.use('/{*splat}', errorRouter);
 
 // connect to sqlite
 await connectSQLite();
