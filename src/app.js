@@ -49,7 +49,7 @@ app.use('/auth', authRouter);
 
 app.use('/health', healthRouter);
 
-app.use('/*', (_, res) => res.status(HTTP_CODES.NOT_FOUND).json({ error: "Endpoint not found" }));
+app.use('/{*splat}', (_, res) => res.status(HTTP_CODES._404_NOT_FOUND).json({ error: "Endpoint not found" }));
 
 // connect to sqlite
 await connectSQLite();
