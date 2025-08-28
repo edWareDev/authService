@@ -1,9 +1,9 @@
 import { createSystemLog } from "../src/usecases/logs/CreateSystemLog.js";
 
 export const startServer = (app) => {
-
+    const DEFAULT_PORT = 3000;
     return new Promise((resolve, reject) => {
-        const PORT = process.env.API_PORT || 3000;
+        const PORT = process.env.API_PORT || DEFAULT_PORT;
 
         const server = app.listen(PORT, async () => {
             const MESSAGE = process.env.NODE_ENV === "development"
