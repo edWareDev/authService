@@ -208,4 +208,4 @@ pm2 status
 
 Responsable del mantenimiento:
 
-Edward Espinoza Tito | edward.espinoza@globalfiber.com.pe
+Edward Espinoza Tito | edwesti2710@gmail.com
