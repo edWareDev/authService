@@ -10,7 +10,7 @@ export const validateSystemToken = async (req) => {
         if (!accessToken || accessToken === '') throw new Error('Error al obtener los datos.', HTTP_CODES._400_BAD_REQUEST, ["Token de autenticación no encontrado."]);
 
         const system = await getSystemByToken(accessToken);
-        if (!system || system.error) throw new Error('Error al validar el sistema.', HTTP_CODES._400_BAD_REQUEST, ["Token de autenticación inválida."]);
+        if (!system || system.error) throw new Error('Error al validar el token del sistema.', HTTP_CODES._400_BAD_REQUEST, ["Token de autenticación inválida."]);
         return system;
 
     } catch (error) {

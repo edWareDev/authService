@@ -8,6 +8,9 @@ export const validationMiddleware = async (req, res, next) => {
     try {
 
         const accessTokenData = validateAccessToken(req);
+        if (!accessTokenData) throw new CustomError('Error al obtener los datos', HTTP_CODES._400_BAD_REQUEST, accessTokenData.error || 'No fue posible validar el token de autenticación');
+        if (accessTokenData.error === 'jwt expired') throw new CustomError('Error al obtener los datos.', HTTP_CODES._401_UNAUTHORIZED, ["Token de autenticación expirado."]);
+        if (accessTokenData.error) throw new CustomError('Error al obtener los datos.', HTTP_CODES._400_BAD_REQUEST, [accessTokenData.error]);
 
         const fechaActual = new Date();
         const fechaCreacion = new Date(accessTokenData.iat * 1000);
