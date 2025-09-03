@@ -2,7 +2,7 @@
 
 ## 🧩 Descripción General
 
-Este servicio fue desarrollado para encargarse de la autenticación de los sistemas desarrollados por la empresa. De esta manera tenemos un endpoint de autenticación.
+Este servicio fue desarrollado para encargarse de la autenticación de mis demás sitemas desarrollados . De esta manera tenemos un endpoint de autenticación y me dejo de preoucupar por el login e información básica en cada sistema.
 
 Este proyecto no incluye aún una interfaz Front-End, pero su arquitectura permite que pueda ser consumido por clientes externos a través de endpoints REST seguros y estructurados.
 
@@ -38,7 +38,7 @@ Este proyecto no incluye aún una interfaz Front-End, pero su arquitectura permi
 ### Clonación del Repositorio
 
 ```bash
-git clone -b main https://github.com/Sattelital/authService
+git clone -b main https://github.com/edWareDev/authService
 cd authService
 ```
 
@@ -208,4 +208,4 @@ pm2 status
 
 Responsable del mantenimiento:
 
-Edward Espinoza Tito | edward.espinoza@globalfiber.com.pe
+Edward Espinoza Tito | edwesti2710@gmail.com
