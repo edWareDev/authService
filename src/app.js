@@ -25,6 +25,8 @@ import { systemValidationMiddleware } from "./adapters/web/middlewares/systemVal
 import { firstRunSetup } from "../config/firstRunSetup.js";
 import { apiInternalRouter } from "./adapters/routers/apiInternalRouter.js";
 import { errorRouter } from "./adapters/routers/errorRouter.js";
+import { errorMiddleware } from "./adapters/web/middlewares/errorMiddleware.js";
+import { routeNotFoundMiddleware } from "./adapters/web/middlewares/routeNotFoundMiddleware.js";
 
 export const app = express();
 const loggingMiddleware = createLoggingMiddleware();
@@ -49,7 +51,9 @@ app.use('/auth', authRouter);
 
 app.use('/health', healthRouter);
 
-app.use('/{*splat}', errorRouter);
+app.use(routeNotFoundMiddleware);
+
+app.use(errorMiddleware);
 
 // connect to sqlite
 await connectSQLite();
