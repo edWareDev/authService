@@ -21,7 +21,7 @@ export default [
       'no-var': 'error',// Prohíbe completamente el uso de `var`
       'semi': ['error', 'always'],// Requiere punto y coma al final de las líneas
       'no-shadow': 'warn',// Da advertencia si sombreas variables del scope padre
-      'no-magic-numbers': ['warn', { ignore: [0, 1], ignoreArrayIndexes: true }] //Evita usar números mágicos en el código, para que sean declarados como constantes.
+      'no-magic-numbers': ['warn', { ignoreArrayIndexes: true }] //Evita usar números mágicos en el código, para que sean declarados como constantes.
     },
     plugins: {
       vitest: pluginVitest // Habilita el plugin de pruebas para Vitest
