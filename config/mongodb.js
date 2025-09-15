@@ -40,7 +40,7 @@ export async function connectMongoDB() {
                 await createSystemLog({
                     errorCode: null,
                     message: MESSAGE,
-                    severityLevel: "info"
+                    severityLevel: "error"
                 });
                 console.error(MESSAGE);
                 return;
@@ -68,7 +68,7 @@ export async function connectMongoDB() {
         await createSystemLog({
             errorCode: null,
             message: MESSAGE,
-            severityLevel: "info"
+            severityLevel: "error"
         });
         console.error(MESSAGE, error);
 

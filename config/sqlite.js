@@ -35,7 +35,7 @@ export async function connectSQLite() {
         await createSystemLog({
             errorCode: null,
             message: MESSAGE,
-            severityLevel: "info"
+            severityLevel: "error"
         });
         console.error(MESSAGE, error);
         systemInfo.setLogDbStatus(false);
